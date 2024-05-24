@@ -17,19 +17,19 @@
             <label for="email">Adresse E-Mail</label>
             <input id="email" type="email" class="form-control" name="email" required>
         </div>
-        
+
         <div class="form-group">
             <label for="password">Mot de passe</label>
             <input id="password" type="password" class="form-control" name="password" required>
         </div>
 
-        </div>
+        <div>
             <input type="checkbox" class="form-check-input" id="stayLoggedIn" name="stayLoggedIn">
             <label class="form-check-label" for="stayLoggedIn">Rester connecté</label>
         </div>
         <button type="submit" class="btn btn-primary">Connexion</button>
-        </div>
-            <button type="button" class="btn btn-secondary" onclick="window.location.href=\'inscription.php\';">Inscription</button>
+        <div>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='inscription.php';">Inscription</button>
         </div>
     </form>
 </main>
