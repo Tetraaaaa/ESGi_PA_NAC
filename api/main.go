@@ -54,7 +54,13 @@ func main() {
 	//Logements
 	r.HandleFunc("/logements", apinac.GetAllLogements).Methods("GET")
 	r.HandleFunc("/logements/id/{id}", apinac.GetLogementByID).Methods("GET")
-	r.HandleFunc("/typelogement", apinac.GetAllTypeLogement).Methods("GET")
+	r.HandleFunc("/logements/pays/{pays}", apinac.GetLogementByPays).Methods("GET")
+	r.HandleFunc("/logements/code-postal/{code_postal}", apinac.GetLogementByCodePostal).Methods("GET")
+	r.HandleFunc("/logements/ville/{ville}", apinac.GetLogementByVille).Methods("GET")
+	r.HandleFunc("/logements/capacite/{min_capacite}/{max_capacite}", apinac.GetLogementByCapacite).Methods("GET")
+	r.HandleFunc("/logements/type", apinac.GetAllTypeLogement).Methods("GET")
+	r.HandleFunc("/logements/type/{type}", apinac.GetLogementByType).Methods("GET")
+	r.HandleFunc("/logements/type/id/{id}", apinac.GetTypeLogementByID).Methods("GET")
 	r.HandleFunc("/logements", apinac.AddLogement).Methods("POST")
 
 	//Calendrier
