@@ -35,6 +35,8 @@ func main() {
 	r.HandleFunc("/users/research-email/{email}",apinac.GetUserByResearchEmail).Methods("GET")
 
 	r.HandleFunc("/users/prenom/{prenom}",apinac.GetUserByPrenom).Methods("GET")
+	r.HandleFunc("/users/nom/{nom}",apinac.GetUserByNom).Methods("GET")
+	r.HandleFunc("/users/research-nom/{nom}",apinac.GetUserByResearchNom).Methods("GET")
 	r.HandleFunc("/users/status/{status}",apinac.GetUserByStatus).Methods("GET")
 
 
