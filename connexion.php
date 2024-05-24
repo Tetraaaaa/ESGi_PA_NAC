@@ -10,7 +10,7 @@
 <body class="bg-blue">
 
 <?php require_once 'include/connection_db.php'; ?>
-
+<!-- Git fonctionne--->
 <main>
     <form method="POST" class="my-login-validation" action="connexion_verif.php">
         <div class="form-group">
