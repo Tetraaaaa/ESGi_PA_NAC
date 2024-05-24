@@ -1,0 +1,28 @@
+.carousel-control-prev, .carousel-control-next {
+    background: none; /* Remove background */
+    border: none; /* Remove border */
+    color: black; /* Set arrow color */
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-image: none; /* Remove default background images */
+}
+.carousel-control-prev-icon:after,
+.carousel-control-next-icon:after {
+    content: '❮'; /* Custom content for 'previous' */
+    font-size: 24px; /* Adjust size as needed */
+    color: black; /* Arrow color */
+}
+.carousel-control-next-icon:after {
+    content: '❯'; /* Custom content for 'next' */
+}
+.carousel-img {
+    height: 300px; /* Fixed height for images */
+    width: auto; /* Adjust width automatically */
+    margin: auto; /* Center the image horizontally */
+    display: block;
+}
+.modal-img {
+    width: 100%; /* Full width inside the modal */
+    height: auto; /* Adjust height automatically */
+}
