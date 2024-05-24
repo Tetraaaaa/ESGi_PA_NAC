@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Quicksand', sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.login-box {
+  position: relative;
+  width: 350px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.login-box .avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.login-box .avatar img {
+  width: 100%;
+  height: 100%;
+}
+
+.login-box h2 {
+  margin-bottom: 20px;
+  color: #fff;
+  font-size: 24px;
+}
+
+.login-box .inputBox {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.login-box .inputBox input {
+  width: 100%;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 25px;
+  text-align: center;
+}
+
+.login-box .inputBox input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.login-box .inputBox input[type="submit"] {
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.login-box .inputBox input[type="submit"]:hover {
+  background: #ddd;
+}
