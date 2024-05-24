@@ -1,0 +1,12 @@
+th, td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+th {
+    background-color: #f2f2f2;
+}
+.bg-success {
+    background-color: #28a745 !important; 
+}

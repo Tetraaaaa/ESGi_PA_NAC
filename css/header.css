@@ -1,0 +1,53 @@
+/* Header */
+/* Importation des polices depuis Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+header {
+  background-color: #FFFFFF; /* Couleur de fond */
+  padding: 10px 20px;
+  display: flex; /* Utilisation de flexbox */
+  align-items: center; /* Alignement vertical */
+  font-family: 'Montserrat', sans-serif; /* Utilisation de la police Montserrat */
+}
+
+
+header img {
+  height: 80px; /* Taille fixe du logo */
+  width: auto;
+}
+
+header .search-box {
+  flex-grow: 1;
+}
+
+header .search-box input {
+  width: 50%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif; /* Utilisation de la police Roboto */
+}
+
+header .search-box .btn {
+  /*margin-left: 5px;*/
+}
+
+header .dropdown {
+  margin-left: 20px;
+}
+
+header input[type="file"] {
+  display: none;
+}
+
+/* Styles pour les liens */
+a {
+  text-decoration: none; /* Retire le soulignement par défaut */
+  color: #007bff; /* Couleur par défaut du lien */
+}
+
+/* Styles pour les liens au survol */
+a:hover {
+  text-decoration: none; /* Retire le soulignement au survol */
+  color: #0056b3; /* Couleur du lien au survol */
+}
