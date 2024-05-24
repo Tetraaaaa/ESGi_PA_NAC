@@ -23,25 +23,12 @@ function truncate_text($text, $chars = 150) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="css/header.css">
-    <style>
-        .card-img-top {
-            width: 100%; /* Ensure the image covers the card width */
-            height: 200px; /* Set a fixed height */
-            object-fit: cover; /* Ensures the image covers the area, and is cropped if larger than the container */
-        }
-        .card {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Add shadow effect */
-            transition: 0.3s; /* Transition for hover effect */
-        }
-        .card:hover {
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Enhanced shadow on hover */
-        }
-    </style>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
     <?php require_once 'header.php'; ?>
 
-    <main class="container">
+    <main class="container main-background">
         <h1>Liste des Logements</h1>
         <div class="row">
             <?php
@@ -67,7 +54,8 @@ function truncate_text($text, $chars = 150) {
         </div>
     </main>
 
-  
+    <?php require_once 'footer.php'; ?>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

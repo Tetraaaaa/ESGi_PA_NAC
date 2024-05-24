@@ -7,8 +7,7 @@
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/index.css">
   <title>Document</title>
 </head>
 <body>
@@ -89,7 +88,7 @@
         <label for="capacite_location">Capacité de location</label>
         <input type="number" class="form-control" id="capacite_location" name="capacite_location" value="<?php echo htmlspecialchars($logement['capacite_location']); ?>" required>
       </div>
-      <button type="submit" class="btn btn-primary">Mettre à jour</button>
+      <button type="submit" class="btn btn-primary">Mettre à jour</button><br><br>
     </form>
     <form action="calendrier_logement.php" method="post">
       <input type="hidden" id="id_logement" name="id_logement" value="<?php echo htmlspecialchars($logement_id); ?>">
@@ -126,7 +125,8 @@
   </div>
   </div>
 </main>
-  
+<?php require_once 'footer.php'; ?>
+
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

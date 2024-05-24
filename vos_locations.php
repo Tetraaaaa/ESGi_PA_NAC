@@ -7,9 +7,8 @@
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="css/header.css">
-  <title>Document</title>
+  <link rel="stylesheet" href="css/index.css">
+  <title>Vos Locations</title>
 </head>
 <body>
 <?php
@@ -20,9 +19,9 @@
     $id_user = $_SESSION['id']; // Récupérer l'ID utilisateur de la session
   ?>
 
-  <main class="container mt-5">
-      <div>
-        <button type="button" class="btn btn-primary" onclick="window.location.href='mettre_en_location_un_logement.php'">Mettre en location un logement</button>
+  <main class="container mt-3 main-background"> <!-- Ajustement ici de mt-5 à mt-3 pour réduire la marge -->
+      <div class="mb-2"> <!-- Changer mb-4 à mb-2 pour réduire la marge inférieure -->
+        <button type="button" class="btn btn-primary-custom" onclick="window.location.href='mettre_en_location_un_logement.php'">Mettre en location un logement</button>
       </div>
     <div class="row">
       <?php
@@ -38,16 +37,20 @@
           echo '<h5 class="card-title">' . htmlspecialchars($row['nom']) . '</h5>';
           echo '<p class="card-text">Prix par nuit: ' . htmlspecialchars($row['prix']) . '€</p>';
           echo '<p class="card-text">Capacité: ' . htmlspecialchars($row['capacite_location']) . ' voyageurs</p>';
-          echo '<a href="modifier_logement.php?id=' . $row['id'] . '" class="btn btn-primary">Modifier</a>';   
-          echo ' <a href="supprimer_logement.php?id=' . $row['id'] . '" class="btn btn-danger" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer ce logement ?\');">Supprimer</a>';
-          echo '</div>'; // Close card-body
-          echo '</div>'; // Close card
-          echo '</div>'; // Close col-md-4
+          echo '<div>'; // Ajouter un div pour contenir les boutons
+          echo '<a href="modifier_logement.php?id=' . $row['id'] . '" class="btn btn-primary me-2">Modifier</a>';  // Ajouter la classe me-2 pour une marge droite
+          echo '<a href="supprimer_logement.php?id=' . $row['id'] . '" class="btn btn-danger" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer ce logement ?\');">Supprimer</a>';
+          echo '</div>'; // Fermer le div contenant les boutons
+          echo '</div>'; // Fermer card-body
+          echo '</div>'; // Fermer card
+          echo '</div>'; // Fermer col-md-4
         }
       ?>
     </div>
   </main>
   
+  <?php require_once 'footer.php'; ?>
+
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

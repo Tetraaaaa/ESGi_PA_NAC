@@ -6,8 +6,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/index.css">
 
     <!-- Include Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -420,8 +419,8 @@ $caracteristiques = $req->fetchAll();
             <div class="form-group">
             <label for="horaires" class="form-label">Heure de contact</label>
             <div>
-                <button type="button" class="btn btn-secondary mt-2" onclick="selectAllHoraires()">Tout sélectionner</button>
-                <button type="button" class="btn btn-secondary mt-2" onclick="deselectAllHoraires()">Tout désélectionner</button>
+                <button type="button" class="btn btn-primary btn-submit" onclick="selectAllHoraires()">Tout sélectionner</button>
+                <button type="button" class="btn btn-primary btn-submit" onclick="deselectAllHoraires()">Tout désélectionner</button><br><br>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="horaire_1" name="horaires[]" value="08:00-09:00">
@@ -537,6 +536,8 @@ function deselectAllHoraires() {
             });
         });
 </script>
+
+<?php require_once 'footer.php'; ?>
 
 </body>
 </html>

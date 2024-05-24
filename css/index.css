@@ -1,106 +1,167 @@
-/* Header */
-header {
-    background-color: #f8f9fa; /* Couleur de fond */
-    padding: 10px 20px;
-    display: flex; /* Utilisation de flexbox */
-    align-items: center; /* Alignement vertical */
-  }
-  
-  header img {
-    height: 80px; /* Taille fixe du logo */
-    width: auto;
-  }
-  
-  header .search-box {
-    flex-grow: 1;
-  }
-  
-  header .search-box input {
-    width: 50%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  header .search-box .btn {
-    /*margin-left: 5px;*/
-  }
-  
-  header .dropdown {
-    margin-left: 20px;
-  }
-  
-  header input[type="file"] {
-    display: none;
-  }
-  
-  
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400&display=swap');
 
-  /* Footer */
-  /* Footer */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Quicksand', sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  color: #fff; /* Ensure the text is visible on the background */
+}
+
+main {
+  flex: 1;
+  padding: 40px 20px;
+}
+
+.main-background {
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  color: #fff; /* Ensure the text is visible on the background */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.2); /* Slightly transparent background for cards */
+  border: none;
+  border-radius: 10px;
+  transition: 0.3s;
+  height: 100%; /* Ensure cards take the full height of the container */
+  max-height: 450px; /* Slightly reduced height */
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-title, .card-text {
+  color: #fff; /* Ensure the text is visible on the card background */
+}
+
+.card .btn-primary, .card .btn-danger {
+  background-color: #fff;
+  color: #111;
+  border: none;
+  transition: 0.3s;
+}
+
+.card .btn-primary:hover, .card .btn-danger:hover {
+  background-color: #ddd;
+  color: #111;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 150px; /* Adjusted height to fit the card size */
+  object-fit: cover;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.card-text {
+  flex-grow: 1;
+}
+
 .footer-basic {
-    padding: 40px 0;
-    background-color: rgba(248, 249, 250, 0.9); /* Couleur de fond grisé légèrement */
-    color: #4b4c4d;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 180px;
-  }
-  
-  .footer-basic ul {
-    padding: 0;
-    list-style: none;
-    text-align: center;
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 0;
-  }
-  
-  .footer-basic li {
-    padding: 0 10px;
-  }
-  
-  .footer-basic ul a {
-    color: inherit;
-    text-decoration: none;
-    opacity: 0.8;
-  }
-  
-  .footer-basic ul a:hover {
-    opacity: 1;
-  }
-  
-  .footer-basic .social {
-    text-align: center;
-    padding-bottom: 25px;
-  }
-  
-  .footer-basic .social > a {
-    font-size: 24px;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    display: inline-block;
-    text-align: center;
-    border-radius: 50%;
-    border: 1px solid #ccc;
-    margin: 0 8px;
-    color: inherit;
-    opacity: 0.75;
-  }
-  
-  .footer-basic .social > a:hover {
-    opacity: 0.9;
-  }
-  
-  .footer-basic .copyright {
-    margin-top: 15px;
-    text-align: center;
-    font-size: 13px;
-    color: #aaa;
-    margin-bottom: 0;
-  }
-  
-  
-  
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+}
+
+.footer-basic ul {
+  text-align: center;
+}
+
+.footer-basic ul li {
+  display: inline;
+  margin: 0 15px;
+}
+
+.footer-basic ul a {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.footer-basic ul a:hover {
+  opacity: 1;
+}
+
+button.btn-primary {
+  background-color: #fff;
+  color: #111;
+  border: none;
+  transition: 0.3s;
+}
+
+button.btn-primary:hover {
+  background-color: #ddd;
+  color: #111;
+}
+
+.btn-primary-custom {
+  background-color: #fff;
+  color: #111;
+  border: none;
+  transition: 0.3s;
+  margin-top: -20px; /* Ajustez cette valeur si nécessaire */
+}
+
+.btn-primary-custom:hover {
+  background-color: #ddd;
+  color: #111;
+}
+
+/* Ajouter une marge entre les boutons Modifier et Supprimer */
+.card .btn-primary {
+  margin-right: 5px; /* Ensure margin-right is applied */
+}
+/* Modifier le style du bouton "Choisir un fichier" */
+.form-control-file {
+  position: relative;
+  overflow: hidden;
+}
+
+.form-control-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  cursor: inherit;
+  display: block;
+}
+
+/* Style personnalisé pour le bouton "Choisir un fichier" */
+.custom-file-upload {
+  display: inline-block;
+  padding: 8px 20px;
+  cursor: pointer;
+  background-color: #fff; /* Couleur de fond */
+  color: #111; /* Couleur du texte */
+  border: 1px solid #ccc; /* Bordure */
+  border-radius: 5px; /* Coins arrondis */
+  transition: 0.3s; /* Transition douce */
+}
+
+.custom-file-upload:hover {
+  background-color: #ddd; /* Changement de couleur de fond au survol */
+}

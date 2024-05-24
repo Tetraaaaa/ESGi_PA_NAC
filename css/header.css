@@ -1,53 +1,74 @@
-/* Header */
-/* Importation des polices depuis Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Quicksand:wght@400&display=swap');
 
 header {
-  background-color: #FFFFFF; /* Couleur de fond */
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
   padding: 10px 20px;
-  display: flex; /* Utilisation de flexbox */
-  align-items: center; /* Alignement vertical */
-  font-family: 'Montserrat', sans-serif; /* Utilisation de la police Montserrat */
+  display: flex;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+header .d-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
 
 header img {
-  height: 80px; /* Taille fixe du logo */
+  height: 80px;
   width: auto;
 }
 
-header .search-box {
-  flex-grow: 1;
+header .nav-links {
+  display: flex;
+  gap: 250px; /* Adjust the gap as needed */
 }
 
-header .search-box input {
-  width: 50%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-family: 'Roboto', sans-serif; /* Utilisation de la police Roboto */
+header a, header .btn {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 700; /* Make the text bold */
 }
 
-header .search-box .btn {
-  /*margin-left: 5px;*/
+header a:hover, header .btn:hover {
+  text-decoration: none;
+  color: #ddd;
 }
 
 header .dropdown {
-  margin-left: 20px;
+  position: relative;
+  display: inline-block;
 }
 
-header input[type="file"] {
+header .dropdown .btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+header .dropdown-content {
   display: none;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.9);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
-/* Styles pour les liens */
-a {
-  text-decoration: none; /* Retire le soulignement par défaut */
-  color: #007bff; /* Couleur par défaut du lien */
+header .dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
 }
 
-/* Styles pour les liens au survol */
-a:hover {
-  text-decoration: none; /* Retire le soulignement au survol */
-  color: #0056b3; /* Couleur du lien au survol */
+header .dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+header .dropdown-content.show {
+  display: block;
 }

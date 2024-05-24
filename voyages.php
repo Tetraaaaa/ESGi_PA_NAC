@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
     <?php 
@@ -66,8 +65,7 @@
             }
         ?>
     </main>
-    <footer>
-    </footer>
+   <?php  require_once 'footer.php'; ?>
     <script>
     function annulerReservation(locationId) {
       if (confirm("Êtes-vous sûr de vouloir annuler cette réservation ?")) {
