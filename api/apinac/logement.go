@@ -71,7 +71,6 @@ func GetLogementByPays(w http.ResponseWriter, r *http.Request) {
 		logements = append(logements, logement)
 	}
 
-	// Check if there was an error after the loop
 	if err = rows.Err(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -107,7 +106,6 @@ func GetLogementByVille(w http.ResponseWriter, r *http.Request) {
 		logements = append(logements, logement)
 	}
 
-	// Check if there was an error after the loop
 	if err = rows.Err(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -142,7 +140,6 @@ func GetLogementByType(w http.ResponseWriter, r *http.Request) {
 		logements = append(logements, logement)
 	}
 
-	// Check if there was an error after the loop
 	if err = rows.Err(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

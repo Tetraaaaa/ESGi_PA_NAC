@@ -55,7 +55,8 @@ func main() {
 	//Locations
 	r.HandleFunc("/locations", apinac.GetAllLocations).Methods("GET")
 	r.HandleFunc("/locations/id/{id}", apinac.GetLocationByID).Methods("GET")
-	r.HandleFunc("/locations/logement/{id_logement}", apinac.GetLocationByIDLogement).Methods("GET")
+	r.HandleFunc("/locations/logement/id/{id}", apinac.GetLocationByIDLogement).Methods("GET")
+	r.HandleFunc("/locations/user/id/{id}", apinac.GetLocationByIDUser).Methods("GET")
 
 	//Logements
 	r.HandleFunc("/logements", apinac.GetAllLogements).Methods("GET")
