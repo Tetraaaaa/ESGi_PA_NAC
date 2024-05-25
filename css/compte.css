@@ -20,6 +20,7 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-top: 50px; /* Déplacement du margin-top ici */
 }
 
 .account-box {
@@ -30,18 +31,24 @@ body {
     border-radius: 10px;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
     text-align: center;
+    background: linear-gradient( #6e8efb, #a777e3); /* Ajout pour uniformiser avec la version modifiée */
+    padding: 20px; /* Ajout pour uniformiser avec la version modifiée */
+    border-radius: 8px; /* Ajout pour uniformiser avec la version modifiée */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajout pour uniformiser avec la version modifiée */
 }
 
 .account-box h1 {
     margin-bottom: 20px;
-    color: #fff;
+    color: #fff; /* Assurez-vous que ce soit la couleur désirée */
     font-size: 24px;
+    margin-bottom: 20px; /* Ajout pour uniformiser avec la version modifiée */
 }
 
 .account-box p {
-    color: #fff;
+    color: #fff; /* Assurez-vous que ce soit la couleur désirée */
     font-size: 16px;
     margin-bottom: 10px;
+    margin: 10px 0; /* Ajout pour uniformiser avec la version modifiée */
 }
 
 .account-box img {
@@ -76,4 +83,13 @@ body {
 .account-box .btn-secondary:hover,
 .account-box .btn-danger:hover {
     opacity: 0.8;
+}
+
+/* Styles pour la photo de profil */
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    cursor: pointer;
+    object-fit: cover;
 }
