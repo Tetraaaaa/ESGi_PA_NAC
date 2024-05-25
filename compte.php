@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo_profil'])) {
             <a href="logout.php" class="btn btn-danger">Déconnexion</a>
         </div>
     </div>
-
+    <br>
     <?php include 'footer.php'; ?>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
