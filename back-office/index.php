@@ -9,9 +9,8 @@
     <link href="../picture/logo.png" rel="icon" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="../Js/script.js" async></script>
-    <style>
-        /* Ajoutez ici votre propre CSS pour personnaliser la page */
-    </style>
+    <link rel="stylesheet" href="css/index.css?v=1.0">
+
 </head>
 
 <?php
