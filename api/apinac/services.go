@@ -75,3 +75,29 @@ func GetServiceByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(service)
 }
+
+func GetServiceByType(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	serviceType := params["type"]
+
+	rows, err := db.Query("SELECT id, id_USER, description, type FROM SERVICE WHERE type = ?",serviceType)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var services []Service
+	for rows.Next() {
+		var service Service
+		err := rows.Scan(&service.ID, &service.UserID, &service.Description, &service.Type)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		services = append(services, service)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(services)
+}

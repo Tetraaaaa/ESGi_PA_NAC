@@ -45,6 +45,7 @@ func main() {
 	//Services
 	r.HandleFunc("/services", apinac.GetAllServices).Methods("GET")
 	r.HandleFunc("/services/id/{id}", apinac.GetServiceByID).Methods("GET")
+	r.HandleFunc("/services/type/{type}", apinac.GetServiceByType).Methods("GET")
 	r.HandleFunc("/services", apinac.AddService).Methods("POST")
 
 	//Locations
