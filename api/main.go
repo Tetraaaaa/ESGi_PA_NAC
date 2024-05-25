@@ -48,9 +48,14 @@ func main() {
 	r.HandleFunc("/services/type/{type}", apinac.GetServiceByType).Methods("GET")
 	r.HandleFunc("/services", apinac.AddService).Methods("POST")
 
+	r.HandleFunc("/services/calendrier", apinac.GetAllCalendrier).Methods("GET")
+	r.HandleFunc("/services/calendrier/date/{date}", apinac.GetCalendrierByDate).Methods("GET")
+	r.HandleFunc("/services/calendrier/service/{service}", apinac.GetCalendrierByServices).Methods("GET")
+
 	//Locations
 	r.HandleFunc("/locations", apinac.GetAllLocations).Methods("GET")
 	r.HandleFunc("/locations/id/{id}", apinac.GetLocationByID).Methods("GET")
+	r.HandleFunc("/locations/logement/{id_logement}", apinac.GetLocationByIDLogement).Methods("GET")
 
 	//Logements
 	r.HandleFunc("/logements", apinac.GetAllLogements).Methods("GET")
@@ -63,9 +68,6 @@ func main() {
 	r.HandleFunc("/logements/type/{type}", apinac.GetLogementByType).Methods("GET")
 	r.HandleFunc("/logements/type/id/{id}", apinac.GetTypeLogementByID).Methods("GET")
 	r.HandleFunc("/logements", apinac.AddLogement).Methods("POST")
-
-	//Calendrier
-	r.HandleFunc("/calendrier", apinac.GetAllCalendrier).Methods("GET")
 
 	//Status
 	r.HandleFunc("/status", apinac.GetAllStatus).Methods("GET")
