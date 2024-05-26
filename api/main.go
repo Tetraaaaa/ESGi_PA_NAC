@@ -46,7 +46,13 @@ func main() {
 	r.HandleFunc("/services", apinac.GetAllServices).Methods("GET")
 	r.HandleFunc("/services/id/{id}", apinac.GetServiceByID).Methods("GET")
 	r.HandleFunc("/services/type/{type}", apinac.GetServiceByType).Methods("GET")
+	r.HandleFunc("/services/user/{user}", apinac.GetServiceByIDUser).Methods("GET")
 	r.HandleFunc("/services", apinac.AddService).Methods("POST")
+
+	r.HandleFunc("/services/demande", apinac.GetAllServiceDemande).Methods("GET")
+	r.HandleFunc("/services/demande/logement/{id}", apinac.GetServiceDemandeByLogemnt).Methods("GET")
+	r.HandleFunc("/services/demande/service/{id}", apinac.GetServiceDemandeByService).Methods("GET")
+	r.HandleFunc("/services/demande/status/{status}", apinac.GetServiceDemandeByStatus).Methods("GET")
 
 	r.HandleFunc("/services/calendrier", apinac.GetAllCalendrier).Methods("GET")
 	r.HandleFunc("/services/calendrier/date/{date}", apinac.GetCalendrierByDate).Methods("GET")
