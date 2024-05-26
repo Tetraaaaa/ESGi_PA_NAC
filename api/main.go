@@ -74,6 +74,12 @@ func main() {
 	r.HandleFunc("/status", apinac.GetAllStatus).Methods("GET")
 	r.HandleFunc("/status/id/{id}", apinac.GetStatusByID).Methods("GET")
 
+	//Departement
+	r.HandleFunc("/departements", apinac.GetAllDepartement).Methods("GET")
+	r.HandleFunc("/departements/id/{id}", apinac.GetDepartementByID).Methods("GET")
+	r.HandleFunc("/departements/nom/{nom}", apinac.GetDepartementByNom).Methods("GET")
+	r.HandleFunc("/departements/research-nom/{nom}", apinac.GetDepartementByResearchNom).Methods("GET")
+
 	//Interventions
 	r.HandleFunc("/interventions", apinac.GetAllInterventions).Methods("GET")
 
