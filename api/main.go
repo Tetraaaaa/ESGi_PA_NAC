@@ -80,6 +80,18 @@ func main() {
 	r.HandleFunc("/status", apinac.GetAllStatus).Methods("GET")
 	r.HandleFunc("/status/id/{id}", apinac.GetStatusByID).Methods("GET")
 
+	//Grade
+	r.HandleFunc("/grade", apinac.GetAllGrade).Methods("GET")
+	r.HandleFunc("/grade/user/{user}", apinac.GetGradebyUser).Methods("GET")
+	r.HandleFunc("/grade/grade/{grade}", apinac.GetGradebyGrade).Methods("GET")
+
+	r.HandleFunc("/grade/type", apinac.GetAllTypeGrade).Methods("GET")
+
+	r.HandleFunc("/grade/valide", apinac.GetValidGrades).Methods("GET")
+	r.HandleFunc("/grade/valide/true", apinac.GetValidGrades).Methods("GET")
+	r.HandleFunc("/grade/valide/false", apinac.GetInvalidGrades).Methods("GET")
+
+
 	//Departement
 	r.HandleFunc("/departements", apinac.GetAllDepartement).Methods("GET")
 	r.HandleFunc("/departements/id/{id}", apinac.GetDepartementByID).Methods("GET")
@@ -95,3 +107,4 @@ func main() {
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
+
