@@ -2,12 +2,20 @@ package bdd
 
 import (
     "database/sql"
+    "os"
     _ "github.com/go-sql-driver/mysql"
+    "fmt"
 )
 
-//Créer une connection à la bdd
+// Créer une connexion à la bdd
 func ConnectDB() (*sql.DB, error) {
-    db, err := sql.Open("mysql", "admin:SuDGhKBjzs9d@tcp(91.134.89.127)/NAC_BDD")
+    dbUser := os.Getenv("DB_USER")
+    dbPassword := os.Getenv("DB_PASSWORD")
+    dbHost := os.Getenv("DB_HOST")
+    dbName := os.Getenv("DB_NAME")
+
+    dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, dbPassword, dbHost, dbName)
+    db, err := sql.Open("mysql", dsn)
     if err != nil {
         return nil, err
     }
