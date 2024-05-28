@@ -218,6 +218,73 @@ func GetUserByPrenom(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(users)
 }
 
+func GetUserByNom(w http.ResponseWriter, r *http.Request) {
+    // Récupérer le prénom de l'utilisateur depuis les paramètres de la requête
+    params := mux.Vars(r)
+    userNom := params["nom"]
+
+    // Préparer la requête SQL pour récupérer les utilisateurs par prénom
+    rows, err := db.Query("SELECT id, id_GRADE, nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE nom = ?", userNom)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    defer rows.Close()
+
+    var users []User
+
+    for rows.Next() {
+        var user User
+        err := rows.Scan(&user.ID, &user.GradeID, &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+        }
+        users = append(users, user)
+    }
+
+    if err = rows.Err(); err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(users)
+}
+
+func GetUserByResearchNom(w http.ResponseWriter, r *http.Request) {
+    params := mux.Vars(r)
+    userNom := params["nom"]
+
+    query := "SELECT id, id_GRADE, nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE nom LIKE ?"
+    rows, err := db.Query(query, "%"+strings.TrimSpace(userNom)+"%")
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    defer rows.Close()
+
+    var users []User
+
+    for rows.Next() {
+        var user User
+        err := rows.Scan(&user.ID, &user.GradeID, &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+        }
+        users = append(users, user)
+    }
+
+    if err = rows.Err(); err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(users)
+}
+
 func GetUserByStatus(w http.ResponseWriter, r *http.Request) {
     params := mux.Vars(r)
     userStatus := params["status"]
