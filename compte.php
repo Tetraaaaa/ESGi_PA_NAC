@@ -6,25 +6,21 @@ if (!isset($_SESSION['email'])) {
     exit;
 }
 
-// Inclure la connexion à la base de données
-include 'include/connection_db.php'; // Assurez-vous que ce fichier définit $bdd
+include 'include/connection_db.php';
 
-// Récupérer les informations de la photo de profil depuis la base de données
 $sql = "SELECT emplacement FROM PHOTO_PROFIL WHERE id_USER = :id";
 $stmt = $bdd->prepare($sql);
 $stmt->bindParam(':id', $_SESSION['id'], PDO::PARAM_INT);
 $stmt->execute();
 $photo = $stmt->fetch(PDO::FETCH_ASSOC);
-$_SESSION['photo_profil'] = $photo['emplacement'] ?? 'photo_de_profil/fond_noir.jpg'; // Mettez à jour la session avec la photo de profil de la base de données
+$_SESSION['photo_profil'] = $photo['emplacement'] ?? 'photo_de_profil/fond_noir.jpg'; 
 
-// Vérifier si une photo de profil a été téléchargée
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo_profil'])) {
     $target_dir = "photo_de_profil/";
     $target_file = $target_dir . basename($_FILES["photo_profil"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    // Vérifiez si le fichier est une image réelle ou une fausse image
     $check = getimagesize($_FILES["photo_profil"]["tmp_name"]);
     if ($check !== false) {
         $uploadOk = 1;
@@ -33,37 +29,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo_profil'])) {
         $uploadOk = 0;
     }
 
-    // Vérifiez si le fichier existe déjà
     if (file_exists($target_file)) {
         echo "Désolé, le fichier existe déjà.";
         $uploadOk = 0;
     }
 
-    // Vérifiez la taille du fichier
     if ($_FILES["photo_profil"]["size"] > 500000) {
         echo "Désolé, votre fichier est trop volumineux.";
         $uploadOk = 0;
     }
 
-    // Autoriser certains formats de fichier
     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
         echo "Désolé, seuls les fichiers JPG, JPEG, PNG et GIF sont autorisés.";
         $uploadOk = 0;
     }
 
-    // Vérifiez si $uploadOk est défini sur 0 par une erreur
     if ($uploadOk == 0) {
         echo "Désolé, votre fichier n'a pas été téléchargé.";
-    // Si tout va bien, essayez de télécharger le fichier
     } else {
-        // Supprimer l'ancienne photo de profil si elle existe et n'est pas l'image par défaut
         if (isset($photo['emplacement']) && $photo['emplacement'] != 'photo_de_profil/fond_noir.jpg') {
             unlink($photo['emplacement']);
         }
 
         if (move_uploaded_file($_FILES["photo_profil"]["tmp_name"], $target_file)) {
             echo "Le fichier " . htmlspecialchars(basename($_FILES["photo_profil"]["name"])) . " a été téléchargé.";
-            // Vérifiez si l'utilisateur a déjà une entrée de photo de profil
             $sql = "SELECT id FROM PHOTO_PROFIL WHERE id_USER = :id";
             $stmt = $bdd->prepare($sql);
             $stmt->bindParam(':id', $_SESSION['id'], PDO::PARAM_INT);
@@ -71,10 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo_profil'])) {
             $existingPhoto = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($existingPhoto) {
-                // Mettre à jour l'entrée existante
                 $sql = "UPDATE PHOTO_PROFIL SET emplacement = :emplacement WHERE id_USER = :id";
             } else {
-                // Insérer une nouvelle entrée
                 $sql = "INSERT INTO PHOTO_PROFIL (id_USER, emplacement) VALUES (:id, :emplacement)";
             }
             
@@ -82,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo_profil'])) {
             $stmt->bindParam(':emplacement', $target_file);
             $stmt->bindParam(':id', $_SESSION['id'], PDO::PARAM_INT);
             if ($stmt->execute()) {
-                // Mettre à jour la session avec la nouvelle photo de profil
                 $_SESSION['photo_profil'] = $target_file;
                 echo "Photo de profil mise à jour avec succès.";
             } else {

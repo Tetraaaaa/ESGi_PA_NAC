@@ -7,12 +7,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['logement_id'])) {
     $photo = $_FILES['photo'];
 
     if ($photo['error'] == 0) {
-        $destinationPath = 'icone/'; // Assurez-vous que ce dossier existe et est accessible en écriture
+        $destinationPath = 'icone/'; 
         $filename = uniqid() . '-' . basename($photo['name']);
         $destination = $destinationPath . $filename;
 
         if (move_uploaded_file($photo['tmp_name'], $destination)) {
-            // Insertion de l'information de la photo dans la base de données
             $insertPhotoStmt = $bdd->prepare("INSERT INTO PHOTO_LOGEMENT (id_LOGEMENT, emplacement) VALUES (?, ?)");
             $insertPhotoStmt->execute([$logement_id, $destination]);
 
