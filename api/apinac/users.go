@@ -10,7 +10,6 @@ import (
 
 type User struct {
 	ID          int     `json:"id"`
-	GradeID     *int    `json:"gradeId"`
 	Nom         string  `json:"nom"`
 	Prenom      string  `json:"prenom"`
 	Status      string  `json:"status"`
@@ -31,14 +30,14 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Insérer l'utilisateur dans la base de données
-	stmt, err := db.Prepare("INSERT INTO USER (id_GRADE, nom, prenom, status, email, age, mot_de_passe, presentation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO USER ( nom, prenom, status, email, age, mot_de_passe, presentation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(user.GradeID, user.Nom, user.Prenom, user.Status, user.Email, user.Age, user.MotDePasse, user.Presentation)
+	_, err = stmt.Exec( user.Nom, user.Prenom, user.Status, user.Email, user.Age, user.MotDePasse, user.Presentation)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -48,7 +47,7 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
-    rows, err := db.Query("SELECT id, id_GRADE, nom, prenom, status, email, age, mot_de_passe, presentation FROM USER")
+    rows, err := db.Query("SELECT id,  nom, prenom, status, email, age, mot_de_passe, presentation FROM USER")
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -58,7 +57,7 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
     var users []User
     for rows.Next() {
         var user User
-        err := rows.Scan(&user.ID, &user.GradeID, &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
+        err := rows.Scan(&user.ID,  &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
         if err != nil {
             http.Error(w, err.Error(), http.StatusInternalServerError)
             return
@@ -76,13 +75,13 @@ func GetUserByID(w http.ResponseWriter, r *http.Request) {
 	userID := params["id"]
 
 	// Préparer la requête SQL pour récupérer l'utilisateur par son ID
-	row := db.QueryRow("SELECT id, id_GRADE, nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE id = ?", userID)
+	row := db.QueryRow("SELECT id,  nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE id = ?", userID)
 
 	// Créer une variable pour stocker les données de l'utilisateur
 	var user User
 
 	// Scanner les données de l'utilisateur dans la variable user
-	err := row.Scan(&user.ID, &user.GradeID, &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
+	err := row.Scan(&user.ID,  &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
 	if err != nil {
 		// Si une erreur se produit lors de la récupération de l'utilisateur, renvoyer une erreur au client
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -129,13 +128,13 @@ func GetUserByEmail(w http.ResponseWriter, r *http.Request) {
 	userEmail := params["email"]
 
 	// Préparer la requête SQL pour récupérer l'utilisateur par son ID
-	row := db.QueryRow("SELECT id, id_GRADE, nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE email = ?", userEmail)
+	row := db.QueryRow("SELECT id,  nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE email = ?", userEmail)
 
 	// Créer une variable pour stocker les données de l'utilisateur
 	var user User
 
 	// Scanner les données de l'utilisateur dans la variable user
-	err := row.Scan(&user.ID, &user.GradeID, &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
+	err := row.Scan(&user.ID,  &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
 	if err != nil {
 		// Si une erreur se produit lors de la récupération de l'utilisateur, renvoyer une erreur au client
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -151,7 +150,7 @@ func GetUserByResearchEmail(w http.ResponseWriter, r *http.Request) {
     params := mux.Vars(r)
     userEmail := params["email"]
 
-    query := "SELECT id, id_GRADE, nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE email LIKE ?"
+    query := "SELECT id,  nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE email LIKE ?"
     rows, err := db.Query(query, "%"+strings.TrimSpace(userEmail)+"%")
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -163,7 +162,7 @@ func GetUserByResearchEmail(w http.ResponseWriter, r *http.Request) {
 
     for rows.Next() {
         var user User
-        err := rows.Scan(&user.ID, &user.GradeID, &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
+        err := rows.Scan(&user.ID,  &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
         if err != nil {
             http.Error(w, err.Error(), http.StatusInternalServerError)
             return
@@ -186,7 +185,7 @@ func GetUserByPrenom(w http.ResponseWriter, r *http.Request) {
     userPrenom := params["prenom"]
 
     // Préparer la requête SQL pour récupérer les utilisateurs par prénom
-    rows, err := db.Query("SELECT id, id_GRADE, nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE prenom = ?", userPrenom)
+    rows, err := db.Query("SELECT id,  nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE prenom = ?", userPrenom)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -199,7 +198,7 @@ func GetUserByPrenom(w http.ResponseWriter, r *http.Request) {
     // Parcourir les résultats et ajouter les utilisateurs à la slice
     for rows.Next() {
         var user User
-        err := rows.Scan(&user.ID, &user.GradeID, &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
+        err := rows.Scan(&user.ID,  &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
         if err != nil {
             http.Error(w, err.Error(), http.StatusInternalServerError)
             return
@@ -224,7 +223,7 @@ func GetUserByNom(w http.ResponseWriter, r *http.Request) {
     userNom := params["nom"]
 
     // Préparer la requête SQL pour récupérer les utilisateurs par prénom
-    rows, err := db.Query("SELECT id, id_GRADE, nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE nom = ?", userNom)
+    rows, err := db.Query("SELECT id,  nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE nom = ?", userNom)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -235,7 +234,7 @@ func GetUserByNom(w http.ResponseWriter, r *http.Request) {
 
     for rows.Next() {
         var user User
-        err := rows.Scan(&user.ID, &user.GradeID, &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
+        err := rows.Scan(&user.ID,  &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
         if err != nil {
             http.Error(w, err.Error(), http.StatusInternalServerError)
             return
@@ -256,7 +255,7 @@ func GetUserByResearchNom(w http.ResponseWriter, r *http.Request) {
     params := mux.Vars(r)
     userNom := params["nom"]
 
-    query := "SELECT id, id_GRADE, nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE nom LIKE ?"
+    query := "SELECT id,  nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE nom LIKE ?"
     rows, err := db.Query(query, "%"+strings.TrimSpace(userNom)+"%")
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -268,7 +267,7 @@ func GetUserByResearchNom(w http.ResponseWriter, r *http.Request) {
 
     for rows.Next() {
         var user User
-        err := rows.Scan(&user.ID, &user.GradeID, &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
+        err := rows.Scan(&user.ID,  &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
         if err != nil {
             http.Error(w, err.Error(), http.StatusInternalServerError)
             return
@@ -289,7 +288,7 @@ func GetUserByStatus(w http.ResponseWriter, r *http.Request) {
     params := mux.Vars(r)
     userStatus := params["status"]
 
-    rows, err := db.Query("SELECT id, id_GRADE, nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE status = ?", userStatus)
+    rows, err := db.Query("SELECT id,  nom, prenom, status, email, age, mot_de_passe, presentation FROM USER WHERE status = ?", userStatus)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -300,7 +299,7 @@ func GetUserByStatus(w http.ResponseWriter, r *http.Request) {
 
     for rows.Next() {
         var user User
-        err := rows.Scan(&user.ID, &user.GradeID, &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
+        err := rows.Scan(&user.ID,  &user.Nom, &user.Prenom, &user.Status, &user.Email, &user.Age, &user.MotDePasse, &user.Presentation)
         if err != nil {
             http.Error(w, err.Error(), http.StatusInternalServerError)
             return
