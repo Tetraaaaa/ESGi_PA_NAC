@@ -15,10 +15,7 @@
     </div>
     <h2>Inscription</h2>
     <form method="POST" action="inscription_verif.php" enctype="multipart/form-data">
-      <div class="inputBox">
-        <label for="photo_profil" class="avatar-btn">Avatar</label>
-        <input type="file" id="photo_profil" name="photo_profil" style="display: none;">
-      </div>
+      
       <div class="inputBox">
         <input type="email" id="email" name="email" placeholder="Adresse E-Mail" required>
       </div>
