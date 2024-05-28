@@ -188,3 +188,21 @@ func GetGradebyGrade(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(grades)
 }
+
+func GetTypeGradeByID(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	TypeGradeId := params["id"]
+
+	row := db.QueryRow("SELECT id, name, prix_mois, prix_an, description FROM TYPE_GRADE WHERE ID = ?", TypeGradeId)
+
+	var typeGrade TypeGrade
+
+	err := row.Scan(&typeGrade.ID,&typeGrade.Name,&typeGrade.PrixMois,&typeGrade.PrixAn,&typeGrade.Description)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(typeGrade)
+}

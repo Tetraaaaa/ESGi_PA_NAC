@@ -63,6 +63,12 @@ func main() {
 	r.HandleFunc("/locations/id/{id}", apinac.GetLocationByID).Methods("GET")
 	r.HandleFunc("/locations/logement/id/{id}", apinac.GetLocationByIDLogement).Methods("GET")
 	r.HandleFunc("/locations/user/id/{id}", apinac.GetLocationByIDUser).Methods("GET")
+	r.HandleFunc("/locations/date/{date}", apinac.GetLocationByDate).Methods("GET")
+	r.HandleFunc("/locations/date/{start}/{end}", apinac.GetLocationByDateRange).Methods("GET")
+	r.HandleFunc("/locations/date/{start}/{end}/logement/{logement}", apinac.GetLocationByLogementAndDateRange).Methods("GET")
+	r.HandleFunc("/locations/date/{start}/{end}/user/{user}", apinac.GetLocationByUserAndDateRange).Methods("GET")
+
+
 
 	//Logements
 	r.HandleFunc("/logements", apinac.GetAllLogements).Methods("GET")
@@ -86,6 +92,7 @@ func main() {
 	r.HandleFunc("/grade/grade/{grade}", apinac.GetGradebyGrade).Methods("GET")
 
 	r.HandleFunc("/grade/type", apinac.GetAllTypeGrade).Methods("GET")
+	r.HandleFunc("/grade/type/id/{id}", apinac.GetTypeGradeByID).Methods("GET")
 
 	r.HandleFunc("/grade/valide", apinac.GetValidGrades).Methods("GET")
 	r.HandleFunc("/grade/valide/true", apinac.GetValidGrades).Methods("GET")
