@@ -97,5 +97,10 @@
     "Entreprise": "Company",
     "Particulier": "Individual",
     "Présentation de l'entreprise": "Company introduction",
-    "Se connecter": "Log in"
+    "Se connecter": "Log in",
+    "Liste des Services": "List of Services",
+    "Type de Service": "Service Type",
+    "Actions": "Actions",
+    "Gérer": "Manage",
+    "Êtes-vous sûr de vouloir supprimer ce service ?": "Are you sure you want to delete this service?"
 }

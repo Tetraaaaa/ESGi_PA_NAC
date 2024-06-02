@@ -97,5 +97,10 @@
     "Entreprise": "Entreprise",
     "Particulier": "Particulier",
     "Présentation de l'entreprise": "Présentation de l'entreprise",
-    "Se connecter": "Se connecter"
+    "Se connecter": "Se connecter",
+    "Liste des Services": "Liste des Services",
+    "Type de Service": "Type de Service",
+    "Actions": "Actions",
+    "Gérer": "Gérer",
+    "Êtes-vous sûr de vouloir supprimer ce service ?": "Êtes-vous sûr de vouloir supprimer ce service ?"
 }
