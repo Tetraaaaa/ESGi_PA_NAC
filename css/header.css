@@ -1,3 +1,25 @@
+/* Styles existants */
+
+/* Ajoutez les styles pour les drapeaux */
+.language-switcher {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espace entre les drapeaux */
+}
+
+.language-switcher img {
+    width: 24px; /* Taille des drapeaux */
+    height: auto;
+    cursor: pointer;
+}
+
+/* Centrer légèrement à droite */
+.language-switcher {
+    margin-left: auto;
+    margin-right: 20px; /* Ajustez cette valeur pour centrer à droite */
+}
+
+/* Styles existants */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Quicksand:wght@400&display=swap');
 
 header {
@@ -23,7 +45,7 @@ header img {
 
 header .nav-links {
   display: flex;
-  gap: 250px; /* Adjust the gap as needed */
+  gap: 20px; /* Adjust the gap as needed */
 }
 
 header a, header .btn {
@@ -131,4 +153,112 @@ header .dropdown-content.show {
 
 .dropdown-content.show {
   display: block;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header .d-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header img {
+    height: 60px;
+  }
+
+  header .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+  }
+
+  header .nav-links a {
+    font-size: 14px;
+  }
+
+  .profile-dropdown .dropdown-content {
+    right: auto;
+    left: 0;
+  }
+}
+
+/* Responsive styles for 420px to 720px */
+@media (max-width: 720px) and (min-width: 420px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header .d-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header img {
+    height: 50px;
+  }
+
+  header .nav-links {
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  header .nav-links a {
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .profile-dropdown {
+    margin-top: 10px;
+  }
+
+  .profile-button {
+    justify-content: center;
+  }
+}
+
+/* Responsive styles for below 420px */
+@media (max-width: 420px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 10px;
+  }
+
+  header .d-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header img {
+    height: 40px;
+  }
+
+  header .nav-links {
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    align-items: center;
+  }
+
+  header .nav-links a {
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .profile-dropdown {
+    margin-top: 5px;
+  }
+
+  .profile-button {
+    justify-content: center;
+  }
 }
