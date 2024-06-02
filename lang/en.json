@@ -88,5 +88,14 @@
     "Sélectionnez un service pour voir les détails ici.": "Select a service to see details here.",
     "Services Liés": "Related Services",
     "Informations sur les services liés à la location actuelle.": "Information about services related to the current rental.",
-    "Sélectionner ce service": "Select this service"
+    "Sélectionner ce service": "Select this service",
+    "Adresse E-Mail": "Email address",
+    "Mot de passe": "Password",
+    "Confirmez le mot de passe": "Confirm password",
+    "Prenom": "First name",
+    "Veuillez sélectionner": "Please select",
+    "Entreprise": "Company",
+    "Particulier": "Individual",
+    "Présentation de l'entreprise": "Company introduction",
+    "Se connecter": "Log in"
 }

@@ -1,9 +1,14 @@
+<?php
+session_start();
+include_once 'init.php';
+?>
+
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<?php echo $_SESSION['lang']; ?>">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inscription</title>
+  <title><?php echo $translations['Inscription']; ?></title>
   <link rel="stylesheet" href="css/inscription.css">
 </head>
 <body>
@@ -13,39 +18,38 @@
     <div class="avatar">
       <img src="image/PCS.png" alt="Avatar">
     </div>
-    <h2>Inscription</h2>
+    <h2><?php echo $translations['Inscription']; ?></h2>
     <form method="POST" action="inscription_verif.php" enctype="multipart/form-data">
-      
       <div class="inputBox">
-        <input type="email" id="email" name="email" placeholder="Adresse E-Mail" required>
+        <input type="email" id="email" name="email" placeholder="<?php echo $translations['Adresse E-Mail']; ?>" required>
       </div>
       <div class="inputBox">
-        <input type="text" id="Nom" name="Nom" placeholder="Nom" required>
+        <input type="text" id="Nom" name="Nom" placeholder="<?php echo $translations['Nom']; ?>" required>
       </div>
       <div class="inputBox">
-        <input type="text" id="Prenom" name="Prenom" placeholder="Prenom" required>
+        <input type="text" id="Prenom" name="Prenom" placeholder="<?php echo $translations['Prenom']; ?>" required>
       </div>
       <div class="inputBox">
-        <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+        <input type="password" id="password" name="password" placeholder="<?php echo $translations['Mot de passe']; ?>" required>
       </div>
       <div class="inputBox">
-        <input type="password" id="password_confirm" name="password_confirm" placeholder="Confirmez le mot de passe" required>
+        <input type="password" id="password_confirm" name="password_confirm" placeholder="<?php echo $translations['Confirmez le mot de passe']; ?>" required>
       </div>
       <div class="inputBox">
-        <input type="date" id="Age" name="Age" placeholder="Date de naissance" required>
+        <input type="date" id="Age" name="Age" placeholder="<?php echo $translations['Date de naissance']; ?>" required>
       </div>
       <div class="inputBox">
         <select id="statusChoice" name="statusChoice" onchange="showPresentationField()">
-          <option value="">Veuillez sélectionner</option>
-          <option value="Entreprise">Oui</option>
-          <option value="Particulier">Non</option>
+          <option value=""><?php echo $translations['Veuillez sélectionner']; ?></option>
+          <option value="Entreprise"><?php echo $translations['Entreprise']; ?></option>
+          <option value="Particulier"><?php echo $translations['Particulier']; ?></option>
         </select>
       </div>
       <div class="inputBox" id="presentationField" style="display: none;">
-        <textarea id="presentation" name="presentation" placeholder="Présentation de l'entreprise"></textarea>
+        <textarea id="presentation" name="presentation" placeholder="<?php echo $translations['Présentation de l\'entreprise']; ?>"></textarea>
       </div>
       <div class="inputBox">
-        <input type="submit" value="S'inscrire">
+        <input type="submit" value="<?php echo $translations['S\'inscrire']; ?>">
       </div>
     </form>
   </div>
