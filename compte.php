@@ -7,13 +7,14 @@ if (!isset($_SESSION['email'])) {
 }
 
 include 'include/connection_db.php';
+include_once 'init.php'; // Inclusion du fichier pour gérer les traductions
 
 $sql = "SELECT emplacement FROM PHOTO_PROFIL WHERE id_USER = :id";
 $stmt = $bdd->prepare($sql);
 $stmt->bindParam(':id', $_SESSION['id'], PDO::PARAM_INT);
 $stmt->execute();
 $photo = $stmt->fetch(PDO::FETCH_ASSOC);
-$_SESSION['photo_profil'] = $photo['emplacement'] ?? 'photo_de_profil/fond_noir.jpg'; 
+$_SESSION['photo_profil'] = $photo['emplacement'] ?? 'photo_de_profil/fond_noir.jpg';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo_profil'])) {
     $target_dir = "photo_de_profil/";
@@ -81,11 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo_profil'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<?php echo $_SESSION['lang']; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compte</title>
+    <title><?php echo $translations['Mon compte']; ?></title>
     <link rel="stylesheet" href="css/compte.css">
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/footer.css">
@@ -96,26 +97,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo_profil'])) {
 
     <div class="container">
         <div class="account-box">
-            <h1>Compte <?php echo ($_SESSION['status'] == '0' ? 'Administrateur' : ($_SESSION['status'] == '1' ? 'Modérateur' : ($_SESSION['status'] == '2' ? 'Utilisateur' : ($_SESSION['status'] == '3' ? 'Entreprise non-validé' : 'Entreprise')))); ?></h1>
+            <h1><?php echo $translations['Mon compte']; ?> <?php echo ($_SESSION['status'] == '0' ? $translations['Admin'] : ($_SESSION['status'] == '1' ? 'Modérateur' : ($_SESSION['status'] == '2' ? 'Utilisateur' : ($_SESSION['status'] == '3' ? 'Entreprise non-validé' : 'Entreprise')))); ?></h1>
             <p><strong>Email:</strong> <?php echo htmlspecialchars($_SESSION['email']); ?></p>
-            <p><strong>Nom:</strong> <?php echo htmlspecialchars($_SESSION['nom']); ?></p>
-            <p><strong>Prénom:</strong> <?php echo htmlspecialchars($_SESSION['prenom']); ?></p>
-            <p><strong>Date de naissance:</strong> <?php echo htmlspecialchars($_SESSION['age']); ?></p>
-            <p><strong>Statut:</strong> <?php echo ($_SESSION['status'] == '0' ? 'Administrateur' : ($_SESSION['status'] == '1' ? 'Modérateur' : ($_SESSION['status'] == '2' ? 'Utilisateur' : ($_SESSION['status'] == '3' ? 'Entreprise non-validé' : 'Entreprise')))); ?></p>
+            <p><strong><?php echo $translations['Nom']; ?>:</strong> <?php echo htmlspecialchars($_SESSION['nom']); ?></p>
+            <p><strong><?php echo $translations['Prénom']; ?>:</strong> <?php echo htmlspecialchars($_SESSION['prenom']); ?></p>
+            <p><strong><?php echo $translations['Date de naissance']; ?>:</strong> <?php echo htmlspecialchars($_SESSION['age']); ?></p>
+            <p><strong><?php echo $translations['Statut']; ?>:</strong> <?php echo ($_SESSION['status'] == '0' ? $translations['Admin'] : ($_SESSION['status'] == '1' ? 'Modérateur' : ($_SESSION['status'] == '2' ? 'Utilisateur' : ($_SESSION['status'] == '3' ? 'Entreprise non-validé' : 'Entreprise')))); ?></p>
             
             <form action="compte.php" method="post" enctype="multipart/form-data">
                 <label for="photo_profil">
-                    <img src="<?php echo htmlspecialchars($_SESSION['photo_profil']); ?>" alt="Photo de Profil" class="profile-pic" id="profilePic">
+                    <img src="<?php echo htmlspecialchars($_SESSION['photo_profil']); ?>" alt="<?php echo $translations['Photo de Profil']; ?>" class="profile-pic" id="profilePic">
                 </label>
                 <input type="file" name="photo_profil" id="photo_profil" style="display:none;" onchange="previewImage(event)">
-                <button type="submit" class="btn btn-primary mt-3">Mettre à jour la photo de profil</button>
+                <button type="submit" class="btn btn-primary mt-3"><?php echo $translations['Mettre à jour la photo de profil']; ?></button>
             </form>
 
             <?php if ($_SESSION['status'] == '4'): ?>
-                <a href="mes_services.php" class="btn btn-secondary">Mes services</a>
-                <a href="mettre_en_vente_un_service.php" class="btn btn-secondary">Mettre en vente un service</a>
+                <a href="mes_services.php" class="btn btn-secondary"><?php echo $translations['Mes services']; ?></a>
+                <a href="mettre_en_vente_un_service.php" class="btn btn-secondary"><?php echo $translations['Mettre en vente un service']; ?></a>
             <?php endif; ?>
-            <a href="logout.php" class="btn btn-danger">Déconnexion</a>
+            <a href="logout.php" class="btn btn-danger"><?php echo $translations['Déconnexion']; ?></a>
         </div>
     </div>
     <br>
