@@ -30,6 +30,15 @@ type TypeLogement struct {
 	Name string `json:"name"`
 }
 
+type PhotoLogement struct {
+    ID         int    `json:"id"`
+    LogementID int    `json:"logementId"`
+    Name       string `json:"name"`
+    Largeur    int    `json:"largeur"`
+    Hauteur    int    `json:"hauteur"`
+    Emplacement string `json:"emplacement"`
+}
+
 func GetLogementByID(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	logementID := params["id"]
@@ -312,3 +321,51 @@ func GetTypeLogementByID(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(typeLogement)
 }
 
+func GetAllPhotosLogement(w http.ResponseWriter, r *http.Request) {
+	rows, err := db.Query("SELECT id, id_Logement, nom, largeur, hauteur, emplacement FROM PHOTO_LOGEMENT")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var photos []PhotoLogement
+	for rows.Next() {
+		var photo PhotoLogement
+		err := rows.Scan(&photo.ID, &photo.LogementID, &photo.Name, &photo.Largeur, &photo.Hauteur, &photo.Emplacement)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		photos = append(photos, photo)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(photos)
+}
+
+func GetPhotosByLogementID(w http.ResponseWriter, r *http.Request) {
+    params := mux.Vars(r)
+    logementID := params["id"]
+
+    rows, err := db.Query("SELECT id, id_Logement, nom, largeur, hauteur, emplacement FROM PHOTO_LOGEMENT WHERE id_Logement = ?", logementID)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    defer rows.Close()
+
+    var photos []PhotoLogement
+    for rows.Next() {
+        var photo PhotoLogement
+        err := rows.Scan(&photo.ID, &photo.LogementID, &photo.Name, &photo.Largeur, &photo.Hauteur, &photo.Emplacement)
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+        }
+        photos = append(photos, photo)
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(photos)
+}

@@ -80,6 +80,9 @@ func main() {
 	r.HandleFunc("/logements/type", apinac.GetAllTypeLogement).Methods("GET")
 	r.HandleFunc("/logements/type/{type}", apinac.GetLogementByType).Methods("GET")
 	r.HandleFunc("/logements/type/id/{id}", apinac.GetTypeLogementByID).Methods("GET")
+	r.HandleFunc("/logements/photo", apinac.GetAllPhotosLogement).Methods("GET")
+	r.HandleFunc("/logements/photo/id/{id}", apinac.GetPhotosByLogementID).Methods("GET")
+
 	r.HandleFunc("/logements", apinac.AddLogement).Methods("POST")
 
 	//Status

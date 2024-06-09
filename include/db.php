@@ -11,4 +11,6 @@ try {
 } catch(PDOException $e) {
     echo "Erreur de connexion : " . $e->getMessage();
 }
+
+$api = "http://91.134.89.127:8080/";
 ?>

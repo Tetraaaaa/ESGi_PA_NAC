@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'include/connection_db.php'; // Connexion à la BDD
+require_once 'include/db.php';
 
 function truncate_text($text, $chars = 150) {
     if (strlen($text) > $chars) {
@@ -9,7 +9,31 @@ function truncate_text($text, $chars = 150) {
     return $text;
 }
 
-?>
+function get_logements($api) {
+    $url = $api . 'logements';
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    return json_decode($response, true);
+}
+
+function get_photo($api, $id) {
+    $url = $api . 'logements/photo/id/' . $id;
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    return json_decode($response, true);
+}
+
+$logements = get_logements($api);?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -32,12 +56,17 @@ function truncate_text($text, $chars = 150) {
         <h1>Liste des Logements</h1>
         <div class="row">
             <?php
-            try {
-                $stmt = $bdd->query("SELECT LOGEMENT.*, PHOTO_LOGEMENT.emplacement AS photo FROM LOGEMENT LEFT JOIN PHOTO_LOGEMENT ON LOGEMENT.id = PHOTO_LOGEMENT.id_LOGEMENT GROUP BY LOGEMENT.id ORDER BY LOGEMENT.id");
-                while ($logement = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            if ($logements) {
+                foreach ($logements as $logement) {
+                    $photos = get_photo($api, $logement['id']);
                     echo '<div class="col-md-4 mb-3">';
                     echo '<div class="card">';
-                    echo '<img src="' . htmlspecialchars($logement['photo']) . '" class="card-img-top" alt="Photo du logement">';
+                    if ($photos && count($photos) > 0) {
+                        $first_photo = $photos[0];
+                        echo '<img src="' . htmlspecialchars($first_photo['emplacement']) . '" class="card-img-top" alt="' . htmlspecialchars($first_photo['name']) . '">';
+                    } else {
+                        echo '<img src="default.jpg" class="card-img-top" alt="Photo du logement">';
+                    }
                     echo '<div class="card-body">';
                     echo '<h5 class="card-title">' . htmlspecialchars($logement['nom']) . '</h5>';
                     echo '<p class="card-text">' . htmlspecialchars(truncate_text($logement['description'])) . '</p>';
@@ -47,8 +76,8 @@ function truncate_text($text, $chars = 150) {
                     echo '</div>'; // End card
                     echo '</div>'; // End col
                 }
-            } catch (PDOException $e) {
-                echo 'Erreur lors de la récupération des logements: ' . $e->getMessage();
+            } else {
+                echo '<p>Aucun logement trouvé.</p>';
             }
             ?>
         </div>
