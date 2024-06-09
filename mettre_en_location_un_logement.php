@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/header.css">
+  
+
 
     <!-- Include Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -88,6 +91,7 @@
 
 <?php
 include 'include/db.php';
+include_once 'init.php';
 
 // Récupérer les caractéristiques de la base de données
 include 'include/db.php';
@@ -106,39 +110,37 @@ $caracteristiques = $req->fetchAll();
 <?php require_once 'header.php'; ?>
 
 <main class="container">
-  <form method="POST" action="mettre_en_location_un_logement_verif.php" class="my-registration-validation" enctype="multipart/form-data">
-
+    <form method="POST" action="mettre_en_location_un_logement_verif.php" class="my-registration-validation" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="nom" class="form-label"><?php echo $translations['Nom de la location']; ?></label>
+        <input type="text" class="form-control" id="nom" name="nom" required>
+      </div>
+      <div class="form-group">
+        <label for="description" class="form-label"><?php echo $translations['Description']; ?></label>
+        <input type="text" class="form-control" id="description" name="description" required>
+      </div>
+      <div class="form-group">
+        <label for="capacite_location" class="form-label"><?php echo $translations['Nombre de locataire']; ?></label>
+        <input type="number" class="form-control" id="capacite_location" name="capacite_location" required>
+      </div>
+      <div class="form-group">
+        <label for="adresse" class="form-label"><?php echo $translations['Adresse']; ?></label>
+        <input type="text" class="form-control" id="adresse" name="adresse" required>
+      </div>
+      <div class="form-group">
+        <label for="ville" class="form-label"><?php echo $translations['Ville']; ?></label>
+        <input type="text" class="form-control" id="ville" name="ville" required>
+      </div>
+      <div class="form-group">
+        <label for="prix" class="form-label"><?php echo $translations['Prix par nuit']; ?></label>
+        <input type="number" class="form-control" id="prix" name="prix" required>
+      </div>
+      <div class="form-group">
+        <label for="code" class="form-label"><?php echo $translations['Code postal']; ?></label>
+        <input type="number" class="form-control" id="code" name="code" required>
+      </div>
               <div class="form-group">
-                <label for="Nom de la location" class="form-label">Nom de la location</label>
-                <input type="text" class="form-control" id="nom" name="nom" required>
-              </div>
-              <div class="form-group">
-                <label for="Description" class="form-label">Description</label>
-                <input type="text" class="form-control" id="description" name="description" required>
-              </div>
-              <div class="form-group">
-                <label for="Nombre de locataire" class="form-label">Nombre de locataire </label>
-                <input type="number" class="form-control" id="capacite_location" name="capacite_location" required>
-
-              </div>
-              <div class="form-group">
-                <label for="Adresse" class="form-label">Adresse</label>
-                <input type="text" class="form-control" id="adresse" name="adresse" required>
-              </div>
-              <div class="form-group">
-                <label for="Ville" class="form-label">Ville</label>
-                <input type="text" class="form-control" id="ville" name="ville" required>
-              </div>
-              <div class="form-group">
-                <label for="prix" class="form-label">Prix par nuit</label>
-                <input type="number" class="form-control" id="prix" name="prix" required>
-              </div>
-              <div class="form-group">
-                <label for="Code postal" class="form-label">Code postal</label>
-                <input type="number" class="form-control" id="code" name="code" required>
-              </div>
-              <div class="form-group">
-                <label for="pays" class="form-label">Pays</label>
+                <label for="pays" class="form-label"><?php echo $translations['Pays']; ?></label>
                 <select id="pays" name="pays" class="form-control" required>
                     <option value="">Sélectionnez un pays</option>
                     <option value="AF">Afghanistan</option>
@@ -390,154 +392,148 @@ $caracteristiques = $req->fetchAll();
                     <option value="ZW">Zimbabwe</option>
                 </select>
             </div>
-              <div class="form-group">
-                <label for="Heure de contacte" class="form-label">Type de logement</label>
-                    <select id="horaire" name="type_logement" class="form-control">
-                        <option value="appartement">Appartement</option>
-                        <option value="maison">Maison</option>
-                        <option value="chalet">Chalet</option>
-                        <option value="villa">Villa</option>
-                        <option value="maison_partagee">Maison partagée</option>
-                    </select>
-              </div>
-
-
-              <div class="form-group">
-                <label for="caracteristique" class="form-label">Caractéristiques du logement</label>
-                <?php foreach ($caracteristiques as $caracteristique) { ?>
-                    <div class="form-check">
-                        <input type="checkbox" id="caracteristique_<?php echo $caracteristique['id']; ?>" name="caracteristiques[]" value="<?php echo $caracteristique['id']; ?>">
-                        <label class="form-check-label" for="caracteristique_<?php echo $caracteristique['id']; ?>">
-                            <?php if (!empty($caracteristique['emplacement'])) { ?>
-                                <img src="icone/<?php echo $caracteristique['emplacement']; ?>" alt="<?php echo htmlspecialchars($caracteristique['nom']); ?>" style="width:20px; height:20px;" onerror="this.onerror=null; this.src='path/to/default/image.png'">
-                            <?php } ?>
-                            <?php echo htmlspecialchars($caracteristique['nom']); ?>
-                        </label>
-                    </div>
-                <?php } ?>
-            </div>
             <div class="form-group">
-            <label for="horaires" class="form-label">Heure de contact</label>
-            <div>
-                <button type="button" class="btn btn-primary btn-submit" onclick="selectAllHoraires()">Tout sélectionner</button>
-                <button type="button" class="btn btn-primary btn-submit" onclick="deselectAllHoraires()">Tout désélectionner</button><br><br>
+        <label for="type_logement" class="form-label"><?php echo $translations['Type de logement']; ?></label>
+        <select id="type_logement" name="type_logement" class="form-control">
+            <option value="appartement"><?php echo $translations['Appartement']; ?></option>
+            <option value="maison"><?php echo $translations['Maison']; ?></option>
+            <option value="chalet"><?php echo $translations['Chalet']; ?></option>
+            <option value="villa"><?php echo $translations['Villa']; ?></option>
+            <option value="maison_partagee"><?php echo $translations['Maison partagée']; ?></option>
+        </select>
             </div>
+
+
+            <div class="form-group">
+        <label for="caracteristiques" class="form-label"><?php echo $translations['Caractéristiques du logement']; ?></label>
+        <?php foreach ($caracteristiques as $caracteristique) { ?>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="horaire_1" name="horaires[]" value="08:00-09:00">
-                <label class="form-check-label" for="horaire_1">8h-9h</label>
+                <input type="checkbox" id="caracteristique_<?php echo $caracteristique['id']; ?>" name="caracteristiques[]" value="<?php echo $caracteristique['id']; ?>">
+                <label class="form-check-label" for="caracteristique_<?php echo $caracteristique['id']; ?>">
+                    <?php if (!empty($caracteristique['emplacement'])) { ?>
+                        <img src="icone/<?php echo $caracteristique['emplacement']; ?>" alt="<?php echo htmlspecialchars($caracteristique['nom']); ?>" style="width:20px; height:20px;" onerror="this.onerror=null; this.src='path/to/default/image.png'">
+                    <?php } ?>
+                    <?php echo htmlspecialchars($caracteristique['nom']); ?>
+                </label>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="horaire_2" name="horaires[]" value="09:00-10:00">
-                <label class="form-check-label" for="horaire_2">9h-10h</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="horaire_3" name="horaires[]" value="10:00-11:00">
-                <label class="form-check-label" for="horaire_3">10h-11h</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="horaire_4" name="horaires[]" value="12:00-13:00">
-                <label class="form-check-label" for="horaire_4">12h-13h</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="horaire_5" name="horaires[]" value="13:00-14:00">
-                <label class="form-check-label" for="horaire_5">13h-14h</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="horaire_6" name="horaires[]" value="14:00-15:00">
-                <label class="form-check-label" for="horaire_6">14h-15h</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="horaire_7" name="horaires[]" value="15:00-16:00">
-                <label class="form-check-label" for="horaire_7">15h-16h</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="horaire_8" name="horaires[]" value="16:00-17:00">
-                <label class="form-check-label" for="horaire_8">16h-17h</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="horaire_9" name="horaires[]" value="17:00-18:00">
-                <label class="form-check-label" for="horaire_9">17h-18h</label>
-            </div>
+        <?php } ?>
+      </div>
+      <div class="form-group">
+        <label for="horaires" class="form-label"><?php echo $translations['Heure de contact']; ?></label>
+        <div>
+            <button type="button" class="btn btn-primary btn-submit" onclick="selectAllHoraires()"><?php echo $translations['Tout sélectionner']; ?></button>
+            <button type="button" class="btn btn-primary btn-submit" onclick="deselectAllHoraires()"><?php echo $translations['Tout désélectionner']; ?></button><br><br>
         </div>
-</div>
-              <div class="form-group">
-                <label for="photos">Photos du logement</label>
-                  <input type="file" class="form-control" id="photos" name="photos[]" accept="image/*" multiple>
-              </div>
-              <button type="submit" class="btn btn-primary btn-submit">S'inscrire</button>
-  </form> 
-</main>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="horaire_1" name="horaires[]" value="08:00-09:00">
+            <label class="form-check-label" for="horaire_1">8h-9h</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="horaire_2" name="horaires[]" value="09:00-10:00">
+            <label class="form-check-label" for="horaire_2">9h-10h</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="horaire_3" name="horaires[]" value="10:00-11:00">
+            <label class="form-check-label" for="horaire_3">10h-11h</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="horaire_4" name="horaires[]" value="12:00-13:00">
+            <label class="form-check-label" for="horaire_4">12h-13h</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="horaire_5" name="horaires[]" value="13:00-14:00">
+            <label class="form-check-label" for="horaire_5">13h-14h</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="horaire_6" name="horaires[]" value="14:00-15:00">
+            <label class="form-check-label" for="horaire_6">14h-15h</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="horaire_7" name="horaires[]" value="15:00-16:00">
+            <label class="form-check-label" for="horaire_7">15h-16h</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="horaire_8" name="horaires[]" value="16:00-17:00">
+            <label class="form-check-label" for="horaire_8">16h-17h</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="horaire_9" name="horaires[]" value="17:00-18:00">
+            <label class="form-check-label" for="horaire_9">17h-18h</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="photos" class="form-label"><?php echo $translations['Photos du logement']; ?></label>
+        <input type="file" class="form-control" id="photos" name="photos[]" accept="image/*" multiple>
+      </div>
+      <button type="submit" class="btn btn-primary btn-submit"><?php echo $translations['S\'inscrire']; ?></button>
+    </form>
+  </main>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 <script>
-// Fonction pour tout sélectionner
-// Fonction pour tout sélectionner
-function selectAll() {
-    const checkboxes = document.querySelectorAll('input[name="caracteristiques[]"]');
-    checkboxes.forEach((checkbox) => {
-        checkbox.checked = true;
-    });
-}
+  function selectAll() {
+      const checkboxes = document.querySelectorAll('input[name="caracteristiques[]"]');
+      checkboxes.forEach((checkbox) => {
+          checkbox.checked = true;
+      });
+  }
 
-// Fonction pour tout désélectionner
-function deselectAll() {
-    const checkboxes = document.querySelectorAll('input[name="caracteristiques[]"]');
-    checkboxes.forEach((checkbox) => {
-        checkbox.checked = false;
-    });
-}
+  function deselectAll() {
+      const checkboxes = document.querySelectorAll('input[name="caracteristiques[]"]');
+      checkboxes.forEach((checkbox) => {
+          checkbox.checked = false;
+      });
+  }
 
-// Fonction pour tout sélectionner pour les horaires
-function selectAllHoraires() {
-    const checkboxes = document.querySelectorAll('input[name="horaires[]"]');
-    checkboxes.forEach((checkbox) => {
-        checkbox.checked = true;
-    });
-}
+  function selectAllHoraires() {
+      const checkboxes = document.querySelectorAll('input[name="horaires[]"]');
+      checkboxes.forEach((checkbox) => {
+          checkbox.checked = true;
+      });
+  }
 
-// Fonction pour tout désélectionner pour les horaires
-function deselectAllHoraires() {
-    const checkboxes = document.querySelectorAll('input[name="horaires[]"]');
-    checkboxes.forEach((checkbox) => {
-        checkbox.checked = false;
-    });
-}
+  function deselectAllHoraires() {
+      const checkboxes = document.querySelectorAll('input[name="horaires[]"]');
+      checkboxes.forEach((checkbox) => {
+          checkbox.checked = false;
+      });
+  }
 
-    $(document).ready(function() {
-            function formatState (state) {
-                if (!state.id) {
-                    return state.text;
-                }
-                var $state = $(
-                    '<span><i class="' + $(state.element).data('icon') + '"></i> ' + state.text + '</span>'
-                );
-                return $state;
-            };
+  $(document).ready(function() {
+          function formatState (state) {
+              if (!state.id) {
+                  return state.text;
+              }
+              var $state = $(
+                  '<span><i class="' + $(state.element).data('icon') + '"></i> ' + state.text + '</span>'
+              );
+              return $state;
+          };
 
-            $('#caracteristique').select2({
-                templateResult: formatState,
-                templateSelection: formatState
-            });
-        });
+          $('#caracteristique').select2({
+              templateResult: formatState,
+              templateSelection: formatState
+          });
+      });
 
-    $(document).ready(function() {
-            $('#pays').select2({
-                placeholder: "Sélectionnez un pays",
-                allowClear: true,
-                matcher: function(params, data) {
-                    if ($.trim(params.term) === '') {
-                        return data;
-                    }
-                    if (data.text.toLowerCase().indexOf(params.term.toLowerCase()) === 0) {
-                        return data;
-                    }
-                    return null;
-                }
-            });
-        });
-</script>
+  $(document).ready(function() {
+          $('#pays').select2({
+              placeholder: "<?php echo $translations['Sélectionnez un pays']; ?>",
+              allowClear: true,
+              matcher: function(params, data) {
+                  if ($.trim(params.term) === '') {
+                      return data;
+                  }
+                  if (data.text.toLowerCase().indexOf(params.term.toLowerCase()) === 0) {
+                      return data;
+                  }
+                  return null;
+              }
+          });
+      });
+  </script>
 
-<?php require_once 'footer.php'; ?>
+  <?php require_once 'footer.php'; ?>
 
 </body>
 </html>

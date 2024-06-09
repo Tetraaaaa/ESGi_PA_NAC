@@ -11,56 +11,52 @@
   <link rel="stylesheet" href="css/header.css">
 
   <title>Modifier Logement</title>
-  <style> .form-check {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .form-check input[type="checkbox"] {
-            position: absolute;
-            opacity: 0;
-        }
-
-        .form-check i {
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
-
-        .form-check label {
-            margin-left: 5px;
-            position: relative;
-            padding-left: 30px;
-            cursor: pointer;
-        }
-
-        .form-check label:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 20px;
-            height: 20px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            background-color: #fff;
-        }
-
-        .form-check input[type="checkbox"]:checked + label:before {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        .form-check input[type="checkbox"]:checked + label:after {
-            content: '\f00c';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            position: absolute;
-            left: 4px;
-            top: 0;
-            font-size: 14px;
-            color: #fff;
-        }</style>
+  <style>
+    .form-check {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .form-check input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+    }
+    .form-check i {
+      margin-right: 10px;
+      font-size: 1.2em;
+    }
+    .form-check label {
+      margin-left: 5px;
+      position: relative;
+      padding-left: 30px;
+      cursor: pointer;
+    }
+    .form-check label:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background-color: #fff;
+    }
+    .form-check input[type="checkbox"]:checked + label:before {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .form-check input[type="checkbox"]:checked + label:after {
+      content: '\f00c';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      position: absolute;
+      left: 4px;
+      top: 0;
+      font-size: 14px;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
   <?php
@@ -177,6 +173,10 @@
     <form action="calendrier_logement.php" method="post">
       <input type="hidden" id="id_logement" name="id_logement" value="<?php echo htmlspecialchars($logement_id); ?>">
       <button type="submit" class="btn btn-primary">Calendrier</button>
+    </form>
+    <form action="service_logement.php" method="get">
+      <input type="hidden" name="logement_id" value="<?php echo htmlspecialchars($logement_id); ?>">
+      <button type="submit" class="btn btn-secondary mt-3">Services</button>
     </form>
     <div class="container mt-4">
       <h3>Photos du logement</h3>

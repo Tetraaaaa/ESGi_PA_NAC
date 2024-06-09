@@ -2,27 +2,53 @@
 require_once 'include/connection_db.php';
 
 if (isset($_GET['id'])) {
-    $serviceId = $_GET['id'];
+    $serviceId = intval($_GET['id']);
 
-    $stmt = $bdd->prepare("SELECT S.id, S.type, S.description, U.nom, U.prenom, U.email 
-                           FROM SERVICE S
-                           JOIN USER U ON S.id_USER = U.id
-                           WHERE S.id = :id");
-    $stmt->bindParam(':id', $serviceId, PDO::PARAM_INT);
-    $stmt->execute();
+    // URL de l'API pour récupérer les détails du service
+    $apiUrl = "http://91.134.89.127:8080/services/id/" . $serviceId;
 
-    $service = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Initialiser cURL
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-    if ($service) {
-        echo '<h4>Détails du Service</h4>';
-        echo '<p><strong>Type:</strong> ' . htmlspecialchars($service['type']) . '</p>';
-        echo '<p><strong>Description:</strong> ' . htmlspecialchars($service['description']) . '</p>';
-        echo '<h5>Informations sur l\'utilisateur associé</h5>';
-        echo '<p><strong>Nom:</strong> ' . htmlspecialchars($service['nom']) . '</p>';
-        echo '<p><strong>Prénom:</strong> ' . htmlspecialchars($service['prenom']) . '</p>';
-        echo '<p><strong>Email:</strong> ' . htmlspecialchars($service['email']) . '</p>';
+    // Exécuter la requête cURL et stocker la réponse
+    $response = curl_exec($ch);
+
+    // Vérifier les erreurs cURL
+    if (curl_errno($ch)) {
+        echo 'Erreur cURL : ' . curl_error($ch);
     } else {
-        echo '<p>Aucun détail trouvé pour ce service.</p>';
+        // Décoder la réponse JSON
+        $service = json_decode($response, true);
+
+        // Fermer cURL
+        curl_close($ch);
+
+        // Vérifier si le service a été trouvé
+        if ($service) {
+            echo '<h4>Détails du Service</h4>';
+            echo '<p><strong>Type:</strong> ' . htmlspecialchars($service['type']) . '</p>';
+            echo '<p><strong>Description:</strong> ' . htmlspecialchars($service['description']) . '</p>';
+        } else {
+            echo '<p>Aucun détail trouvé pour ce service.</p>';
+        }
     }
+} else {
+    echo '<p>ID de service non spécifié.</p>';
 }
 ?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails du Service</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+<body class="container text-center">
+    <?php include 'header.php'; ?>
+    <div class="container mt-5">
+    </div>
+</body>
+</html>
