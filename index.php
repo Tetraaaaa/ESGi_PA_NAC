@@ -40,9 +40,11 @@ $logements = get_logements($api);
 
 <!DOCTYPE html>
 <html lang="<?php echo $_SESSION['lang']; ?>">
+<html lang="<?php echo $_SESSION['lang']; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $translations['Liste des Logements']; ?></title>
     <title><?php echo $translations['Liste des Logements']; ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -57,6 +59,7 @@ $logements = get_logements($api);
 
     <main class="container main-background">
         <h1><?php echo $translations['Liste des Logements']; ?></h1>
+        <h1><?php echo $translations['Liste des Logements']; ?></h1>
         <div class="row">
             <?php
             if ($logements) {
@@ -70,6 +73,8 @@ $logements = get_logements($api);
                     echo '<div class="card-body">';
                     echo '<h5 class="card-title">' . htmlspecialchars($logement['nom']) . '</h5>';
                     echo '<p class="card-text">' . htmlspecialchars(truncate_text($logement['description'])) . '</p>';
+                    echo '<p class="card-text"><small class="text-muted">' . $translations['Prix'] . ': ' . htmlspecialchars($logement['prix']) . '€ ' . $translations['par nuit'] . '</small></p>';
+                    echo '<a href="detail_logement.php?id=' . $logement['id'] . '" class="btn btn-primary">' . $translations['Réserver'] . '</a>';
                     echo '<p class="card-text"><small class="text-muted">' . $translations['Prix'] . ': ' . htmlspecialchars($logement['prix']) . '€ ' . $translations['par nuit'] . '</small></p>';
                     echo '<a href="detail_logement.php?id=' . $logement['id'] . '" class="btn btn-primary">' . $translations['Réserver'] . '</a>';
                     echo '</div>'; // End card-body

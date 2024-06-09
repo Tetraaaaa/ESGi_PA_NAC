@@ -5,12 +5,16 @@ error_reporting(E_ALL);
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
+    session_start();
 }
 
 require_once 'include/connection_db.php';
 include_once 'init.php';
+require_once 'include/connection_db.php';
+include_once 'init.php';
 
 if (!isset($_SESSION['id'])) {
+    header("Location: connexion.php");
     header("Location: connexion.php");
     exit;
 }
@@ -33,7 +37,11 @@ $services = get_services($api, $userId);
 
 <!DOCTYPE html>
 <html lang="<?php echo $_SESSION['lang']; ?>">
+<html lang="<?php echo $_SESSION['lang']; ?>">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $translations['Liste des Services']; ?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $translations['Liste des Services']; ?></title>
@@ -42,11 +50,13 @@ $services = get_services($api, $userId);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/header.css">
 </head>
 <body>
 <?php require_once 'header.php'; ?>
 <main class="container mt-4">
+    <h2><?php echo $translations['Liste des Services']; ?></h2>
     <h2><?php echo $translations['Liste des Services']; ?></h2>
     <table class="table table-striped">
         <thead>
@@ -81,11 +91,22 @@ $services = get_services($api, $userId);
 </footer>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 <script>
+</main>
+<footer>
+    <?php require_once 'footer.php'; ?>
+</footer>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<script>
     function deleteService(serviceId) {
+        if (confirm("<?php echo $translations['Êtes-vous sûr de vouloir supprimer ce service ?']; ?>")) {
+            window.location.href = 'delete_service.php?id=' + serviceId;
+        }
         if (confirm("<?php echo $translations['Êtes-vous sûr de vouloir supprimer ce service ?']; ?>")) {
             window.location.href = 'delete_service.php?id=' + serviceId;
         }
     }
 </script>
+</script>
 </body>
 </html>
+
