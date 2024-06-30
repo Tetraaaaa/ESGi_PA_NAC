@@ -1,0 +1,60 @@
+/* icons.css */
+.icon-filters {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.icon-filters-inner {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    width: calc(100% - 60px); /* Adjust width considering chevrons */
+}
+
+.filter-icon-wrapper {
+    flex: 0 0 auto;
+    display: none;
+    margin-left: 30px;
+}
+
+.filter-icon {
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    margin: 0 5px; /* Adjust spacing between icons */
+}
+
+.filter-icon img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 5px;
+}
+
+.filter-icon span {
+    display: block;
+    font-size: 14px;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0; /* Adjust position to be closer to the icons */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.pagination-btn {
+    cursor: pointer;
+    font-size: 24px;
+    margin: 0 5px; /* Adjust margin */
+    user-select: none;
+}
+
+@media (max-width: 768px) {
+    .filter-icon img {
+        width: 40px;
+        height: 40px;
+    }
+}

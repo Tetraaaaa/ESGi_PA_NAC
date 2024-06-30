@@ -42,14 +42,18 @@ try {
         ':presentation' => $presentation
     ]);
 
-    // Supprimer les données de session après l'insertion
+    // Stocker les informations de l'utilisateur dans la session
+    $_SESSION['email'] = $email;
+    $_SESSION['id'] = $id;
+    $_SESSION['nom'] = $nom;
+    $_SESSION['age'] = $date_naissance;
+    $_SESSION['status'] = $status;
+    $_SESSION['prenom'] = $prenom;
+    $_SESSION['password'] = $hashedPassword;
+
+    // Supprimer les données de session temporaires après l'insertion
     unset($_SESSION['validationCode']);
     unset($_SESSION['validationCodeExpires']);
-    unset($_SESSION['email']);
-    unset($_SESSION['nom']);
-    unset($_SESSION['prenom']);
-    unset($_SESSION['password']);
-    unset($_SESSION['date_naissance']);
     unset($_SESSION['statusChoice']);
     unset($_SESSION['presentation']);
 

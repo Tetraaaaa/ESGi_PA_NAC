@@ -7,14 +7,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['logement_id'])) {
     $photo = $_FILES['photo'];
 
     if ($photo['error'] == 0) {
-        $destinationPath = 'chemin/vers/le/dossier/des/photos/';
+        $destinationPath = 'icone/'; // Assurez-vous que ce dossier existe et est accessible en écriture
         $filename = uniqid() . '-' . basename($photo['name']);
         $destination = $destinationPath . $filename;
 
         if (move_uploaded_file($photo['tmp_name'], $destination)) {
             // Insertion de l'information de la photo dans la base de données
-            $insertPhotoStmt = $bdd->prepare("INSERT INTO PHOTO_LOGEMENT (id_LOGEMENT, nom, emplacement) VALUES (?, ?, ?)");
-            $insertPhotoStmt->execute([$logement_id, $filename, $destination]);
+            $insertPhotoStmt = $bdd->prepare("INSERT INTO PHOTO_LOGEMENT (id_LOGEMENT, emplacement) VALUES (?, ?)");
+            $insertPhotoStmt->execute([$logement_id, $destination]);
 
             echo "<p>Photo ajoutée avec succès.</p>";
             header('Refresh: 2; URL=modifier_logement.php?id=' . $logement_id);

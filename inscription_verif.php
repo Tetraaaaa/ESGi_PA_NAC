@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 require_once 'include/connection_db.php';
 require_once 'send_valid_email.php';
 
@@ -14,17 +15,20 @@ $presentation = $_POST['presentation'];
 
 $dateNaissanceObj = new DateTime($date_naissance);
 if ($dateNaissanceObj === false) {
+    echo "Invalid date format";
     header('Location: inscription.php?erreur=formatDateInvalide');
     exit;
 }
 
 if ($password != $password_confirm) {
+    echo "Passwords do not match";
     header('Location: inscription.php?erreur=passwordNonIdentiques');
     exit;
 }
 
 $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
 if (!preg_match($pattern, $password)) {
+    echo "Password is too weak";
     header('Location: inscription.php?erreur=passwordFaible');
     exit;
 }
@@ -32,6 +36,7 @@ if (!preg_match($pattern, $password)) {
 $query = $bdd->prepare('SELECT * FROM USER WHERE email = :email');
 $query->execute(['email' => $email]);
 if ($query->fetch()) {
+    echo "Email already exists";
     header('Location: inscription.php?erreur=emailExistant');
     exit;
 }
@@ -46,10 +51,12 @@ if ($_FILES['photo_profil']['size'] > 0) {
         if (move_uploaded_file($_FILES['photo_profil']['tmp_name'], $targetFilePath)) {
             $photo_profil = $targetFilePath;
         } else {
+            echo "Photo upload error";
             header('Location: inscription.php?erreur=erreurTelechargementPhoto');
             exit;
         }
     } else {
+        echo "File type not supported";
         header('Location: inscription.php?erreur=typeFichierNonSupporte');
         exit;
     }
@@ -71,6 +78,13 @@ $_SESSION['validationCodeExpires'] = time() + 300;
 
 sendValidationEmail($email, $validationCode);
 
-header('Location: code_validation_email.php');
+// Ajoutez un message de débogage avant la redirection
+echo "Validation email sent, redirecting to code_validation_email.php..."; // Message de débogage
+
+// Utilisez des chemins absolus pour les redirections
+header('Location: /code_validation_email.php');
 exit;
+
+echo "If you see this, redirection did not work"; // Message de débogage si la redirection échoue pour une raison quelconque
+ob_end_flush();
 ?>

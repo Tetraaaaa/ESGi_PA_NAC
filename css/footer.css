@@ -5,6 +5,7 @@
   background: linear-gradient(135deg, #6e8efb, #a777e3);
   color: white;
   font-family: 'Quicksand', sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added for shadow */
 }
 
 .footer-basic .social {

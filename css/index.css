@@ -21,7 +21,7 @@ main {
 }
 
 .main-background {
-  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  /*background: linear-gradient(135deg, #6e8efb, #a777e3);*/
   color: #fff; /* Ensure the text is visible on the background */
 }
 

@@ -1,5 +1,13 @@
+<?php
+session_start();
+include_once 'init.php';
+require 'include/connection_db.php';
+
+$id_user = $_SESSION['id'];
+?>
+
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<?php echo $_SESSION['lang']; ?>">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,24 +18,17 @@
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/header.css">
 
-  <title>Vos Locations</title>
+  <title><?php echo $translations['Vos locations']; ?></title>
 </head>
 <body>
-<?php
-    session_start();
-    require_once 'header.php';
-    require 'include/db.php'; // Assurez-vous que ce fichier contient les informations de connexion à votre base de données.
+  <?php require_once 'header.php'; ?>
 
-    $id_user = $_SESSION['id']; // Récupérer l'ID utilisateur de la session
-  ?>
-
-  <main class="container mt-3 main-background"> <!-- Ajustement ici de mt-5 à mt-3 pour réduire la marge -->
-      <div class="mb-2"> <!-- Changer mb-4 à mb-2 pour réduire la marge inférieure -->
-        <button type="button" class="btn btn-primary-custom" onclick="window.location.href='mettre_en_location_un_logement.php'">Mettre en location un logement</button>
+  <main class="container mt-3 main-background">
+      <div class="mb-2">
+        <button type="button" class="btn btn-primary-custom" onclick="window.location.href='mettre_en_location_un_logement.php'"><?php echo $translations['Mettre en location un logement']; ?></button>
       </div>
     <div class="row">
       <?php
-        // Requête pour récupérer les logements de l'utilisateur
         $stmt = $bdd->prepare("SELECT LOGEMENT.id, LOGEMENT.nom, LOGEMENT.prix, LOGEMENT.capacite_location, PHOTO_LOGEMENT.emplacement FROM LOGEMENT LEFT JOIN PHOTO_LOGEMENT ON LOGEMENT.id = PHOTO_LOGEMENT.id_LOGEMENT WHERE LOGEMENT.id_user = :id_user GROUP BY LOGEMENT.id");
         $stmt->execute([':id_user' => $id_user]);
 
@@ -37,15 +38,16 @@
           echo '<img src="' . htmlspecialchars($row['emplacement']) . '" class="card-img-top" alt="Photo de logement">';
           echo '<div class="card-body">';
           echo '<h5 class="card-title">' . htmlspecialchars($row['nom']) . '</h5>';
-          echo '<p class="card-text">Prix par nuit: ' . htmlspecialchars($row['prix']) . '€</p>';
-          echo '<p class="card-text">Capacité: ' . htmlspecialchars($row['capacite_location']) . ' voyageurs</p>';
-          echo '<div>'; // Ajouter un div pour contenir les boutons
-          echo '<a href="modifier_logement.php?id=' . $row['id'] . '" class="btn btn-primary me-2">Modifier</a>';  // Ajouter la classe me-2 pour une marge droite
-          echo '<a href="supprimer_logement.php?id=' . $row['id'] . '" class="btn btn-danger" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer ce logement ?\');">Supprimer</a>';
-          echo '</div>'; // Fermer le div contenant les boutons
-          echo '</div>'; // Fermer card-body
-          echo '</div>'; // Fermer card
-          echo '</div>'; // Fermer col-md-4
+          echo '<p class="card-text">' . $translations['Prix par nuit'] . ': ' . htmlspecialchars($row['prix']) . '€</p>';
+          echo '<p class="card-text">' . $translations['Capacité'] . ': ' . htmlspecialchars($row['capacite_location']) . ' ' . $translations['voyageurs'] . '</p>';
+          echo '<div>';
+          echo '<a href="modifier_logement.php?id=' . $row['id'] . '" class="btn btn-primary me-2">' . $translations['Modifier'] . '</a>';
+          echo '<a href="supprimer_logement.php?id=' . $row['id'] . '" class="btn btn-danger me-2" onclick="return confirm(\'' . $translations['Êtes-vous sûr de vouloir supprimer ce logement ?'] . '\');">' . $translations['Supprimer'] . '</a>';
+          echo '<a href="planning_location.php?id_logement=' . $row['id'] . '" class="btn btn-info">Planning Location</a>'; // Direct text
+          echo '</div>';
+          echo '</div>';
+          echo '</div>';
+          echo '</div>';
         }
       ?>
     </div>
