@@ -9,8 +9,20 @@ if (!isset($_GET['logement_id']) || empty($_GET['logement_id'])) {
 }
 
 $logement_id = $_GET['logement_id'];
+$user_id = $_SESSION['id'];
 
-// Requête pour récupérer les services liés au logement
+
+$stmt = $bdd->prepare("SELECT id_USER FROM LOGEMENT WHERE id = ?");
+$stmt->execute([$logement_id]);
+$logement = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$logement || $logement['id_USER'] != $user_id) {
+    echo '<p>Vous n\'avez pas l\'autorisation d\'accéder à cette page.</p>';
+    header('Location: index.php');
+    exit;
+}
+
+
 $stmt = $bdd->prepare("
     SELECT SELECTIONNE.*, SERVICE.type, SERVICE.description, SERVICE.id AS service_id, USER.nom, USER.prenom, LOGEMENT.id_USER
     FROM SELECTIONNE

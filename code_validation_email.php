@@ -1,13 +1,10 @@
 <?php
 session_start();
-
 if (!isset($_SESSION['validationCode'])) {
     header('Location: inscription.php');
     exit;
 }
-
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -16,7 +13,6 @@ if (!isset($_SESSION['validationCode'])) {
     <link rel="stylesheet" href="css/connexion.css">
 </head>
 <body>
-
 <div class="container">
   <div class="login-box">
     <div class="avatar">

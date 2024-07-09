@@ -1,0 +1,85 @@
+.chatbot-container #chatbot-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: url('image/chatbot.jpg') no-repeat center center;
+            background-size: cover;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .chatbot-container #chatbox-container {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            border-radius: 10px;
+        }
+
+        .chatbot-container #chatbox {
+            flex: 1;
+            padding: 10px;
+            overflow-y: scroll;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .chatbot-container #userInput, .chatbot-container #language, .chatbot-container button {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: none;
+            background-color: white;
+            color: black;
+        }
+
+        .chatbot-container #userInput {
+            border-radius: 0;
+            border-top: 1px solid #ccc;
+        }
+
+        .chatbot-container .message {
+            padding: 10px 15px;
+            margin: 10px;
+            border-radius: 20px;
+            display: inline-block;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .chatbot-container .user {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-end;
+            border-radius: 20px 20px 0 20px;
+        }
+
+        .chatbot-container .bot {
+            background-color: #28a745;
+            color: white;
+            align-self: flex-start;
+            border-radius: 20px 20px 20px 0;
+        }
+
+        .chatbot-container #chatbox-container header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .chatbot-container .separator {
+            border-top: 1px solid #ccc;
+            margin: 0;
+        }

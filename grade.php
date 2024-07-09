@@ -10,23 +10,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
         <link rel="stylesheet" href="css/index.css">
         <link rel="stylesheet" href="css/header.css">
-        <style>
-            .v-flex {
-                border: 1px solid white;
-                border-radius: 10px; /* Ajuster cette valeur pour plus ou moins d'arrondi */
-                padding: 10px; /* Facultatif, pour ajouter un peu d'espace autour du contenu */
-                margin: 0 20px; /* Ajuster cette valeur pour rapprocher les éléments */
-                width: 200px; /* Fixer la largeur */
-                word-wrap: break-word; /* Forcer le retour à la ligne */
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-            .d-flex {
-                justify-content: center;
-                align-items: flex-start; /* Alignement des div en haut */
-            }
-        </style>
+        <link rel="stylesheet" href="css/grade.css">
     </head>
     <body>
         <?php require_once 'include/connection_db.php'; 

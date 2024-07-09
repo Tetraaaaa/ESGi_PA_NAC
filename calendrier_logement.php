@@ -72,7 +72,7 @@ let anneeActuelle;
 
 function initCalendar() {
     const aujourdHui = new Date();
-    moisActuel = aujourdHui.getMonth() + 1; // JavaScript compte les mois de 0 à 11
+    moisActuel = aujourdHui.getMonth() + 1; 
     anneeActuelle = aujourdHui.getFullYear();
     updateCalendar();
 }
@@ -144,7 +144,7 @@ function supprimerDate(date) {
             const response = JSON.parse(this.responseText);
             if (response.status === 'success') {
                 datesDispo = datesDispo.filter(d => d !== date);
-                updateCalendar(); // Rafraîchir le calendrier après suppression
+                updateCalendar(); 
             }
         }
     };
@@ -180,8 +180,8 @@ function ajouterDate(date) {
         if (this.status === 200) {
             const response = JSON.parse(this.responseText);
             if (response.status === 'success') {
-                datesDispo.push(date); // Ajouter la nouvelle date au tableau
-                updateCalendar(); // Mettre à jour le calendrier pour refléter l'ajout
+                datesDispo.push(date); 
+                updateCalendar(); 
             }
         }
     };

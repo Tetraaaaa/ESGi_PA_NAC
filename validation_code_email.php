@@ -21,7 +21,7 @@ try {
     $status = ($statusChoice === 'Entreprise') ? 3 : 2;
     $hashedPassword = hash('sha512', $password);
 
-    // Générer un ID aléatoire unique
+
     do {
         $id = mt_rand(1, 2147483647);
         $query = $bdd->prepare("SELECT COUNT(*) FROM USER WHERE id = :id");
@@ -42,7 +42,7 @@ try {
         ':presentation' => $presentation
     ]);
 
-    // Stocker les informations de l'utilisateur dans la session
+
     $_SESSION['email'] = $email;
     $_SESSION['id'] = $id;
     $_SESSION['nom'] = $nom;
@@ -51,7 +51,6 @@ try {
     $_SESSION['prenom'] = $prenom;
     $_SESSION['password'] = $hashedPassword;
 
-    // Supprimer les données de session temporaires après l'insertion
     unset($_SESSION['validationCode']);
     unset($_SESSION['validationCodeExpires']);
     unset($_SESSION['statusChoice']);

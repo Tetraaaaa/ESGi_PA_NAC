@@ -19,7 +19,6 @@ $voyageurs = isset($_GET['voyageurs']) ? (int) $_GET['voyageurs'] : 0;
 
 $hasFilter = $searchTerm || $filter || $pays || $arrivee || $depart || $voyageurs;
 
-// Récupérer les icônes depuis la table ICONE_FILTRE
 $icons = $bdd->query("SELECT * FROM ICONE_FILTRE")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -37,8 +36,6 @@ $icons = $bdd->query("SELECT * FROM ICONE_FILTRE")->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/icons.css"> 
     <script src="js/icons.js" defer></script>
-
-
     <style>
         .icon-filters {
             display: flex;
@@ -93,7 +90,7 @@ $icons = $bdd->query("SELECT * FROM ICONE_FILTRE")->fetchAll(PDO::FETCH_ASSOC);
             align-items: center;
         }
         .search-form button img {
-            width: 20px; /* Ajustez la taille de l'icône selon vos besoins */
+            width: 20px;
             height: 20px;
         }
         @media (max-width: 768px) {
@@ -122,131 +119,128 @@ $icons = $bdd->query("SELECT * FROM ICONE_FILTRE")->fetchAll(PDO::FETCH_ASSOC);
         <h1 class="text-center"><?php echo $translations['Liste des Logements']; ?></h1>
 
         <div id="icon-filters-container" class="icon-filters">
-    <div class="icon-filters-inner">
-        <?php foreach ($icons as $icon): ?>
-            <div class="filter-icon-wrapper">
-                <a href="index.php?filter=<?php echo htmlspecialchars($icon['nom']); ?>" class="filter-icon">
-                    <img src="image/<?php echo htmlspecialchars(basename($icon['emplacement'])); ?>" alt="<?php echo htmlspecialchars($icon['nom']); ?>">
-                    <span><?php echo htmlspecialchars($icon['nom']); ?></span>
-                </a>
+            <div class="icon-filters-inner">
+                <?php foreach ($icons as $icon): ?>
+                    <div class="filter-icon-wrapper">
+                        <a href="index.php?filter=<?php echo htmlspecialchars($icon['nom']); ?>" class="filter-icon">
+                            <img src="image/<?php echo htmlspecialchars(basename($icon['emplacement'])); ?>" alt="<?php echo htmlspecialchars($icon['nom']); ?>">
+                            <span><?php echo htmlspecialchars($icon['nom']); ?></span>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
             </div>
-        <?php endforeach; ?>
-    </div>
-    <div class="pagination-controls">
-        <span id="prev-btn" class="pagination-btn">&laquo;</span>
-        <span id="next-btn" class="pagination-btn">&raquo;</span>
-    </div>
-</div>
-
-
-
-
-    <form method="get" action="index.php" class="search-form">
-        <div>
-            <label for="search">Destination</label>
-            <input type="text" id="search" name="search" class="form-control" placeholder="Rechercher une destination..." value="<?php echo $searchTerm; ?>">
+            <div class="pagination-controls">
+                <span id="prev-btn" class="pagination-btn">&laquo;</span>
+                <span id="next-btn" class="pagination-btn">&raquo;</span>
+            </div>
         </div>
-        <div>
-            <label for="arrivee">Arrivée</label>
-            <input type="date" id="arrivee" name="arrivee" class="form-control" value="<?php echo $arrivee; ?>">
-        </div>
-        <div>
-            <label for="depart">Départ</label>
-            <input type="date" id="depart" name="depart" class="form-control" value="<?php echo $depart; ?>">
-        </div>
-        <div>
-            <label for="voyageurs">Voyageurs</label>
-            <input type="number" id="voyageurs" name="voyageurs" class="form-control" placeholder="Ajouter des voyageurs" value="<?php echo $voyageurs; ?>">
-        </div>
-        <button type="submit"><img src="image/loupe.png" alt="Search"></button>
-    </form>
 
-    <div class="row">
-        <?php
-        try {
-            $query = "SELECT LOGEMENT.*, PHOTO_LOGEMENT.emplacement AS photo 
-                      FROM LOGEMENT 
-                      LEFT JOIN PHOTO_LOGEMENT ON LOGEMENT.id = PHOTO_LOGEMENT.id_LOGEMENT 
-                      WHERE 1=1";
+        <form method="get" action="index.php" class="search-form">
+            <div>
+                <label for="search"><?php echo isset($translations['Destination']) ? $translations['Destination'] : 'Destination'; ?></label>
+                <input type="text" id="search" name="search" class="form-control" placeholder="<?php echo isset($translations['Rechercher une destination...']) ? $translations['Rechercher une destination...'] : 'Rechercher une destination...'; ?>" value="<?php echo $searchTerm; ?>">
+            </div>
+            <div>
+                <label for="arrivee"><?php echo isset($translations['Arrivée']) ? $translations['Arrivée'] : 'Arrivée'; ?></label>
+                <input type="date" id="arrivee" name="arrivee" class="form-control" value="<?php echo $arrivee; ?>">
+            </div>
+            <div>
+                <label for="depart"><?php echo isset($translations['Départ']) ? $translations['Départ'] : 'Départ'; ?></label>
+                <input type="date" id="depart" name="depart" class="form-control" value="<?php echo $depart; ?>">
+            </div>
+            <div>
+                <label for="voyageurs"><?php echo isset($translations['Voyageurs']) ? $translations['Voyageurs'] : 'Voyageurs'; ?></label>
+                <input type="number" id="voyageurs" name="voyageurs" class="form-control" placeholder="<?php echo isset($translations['Ajouter des voyageurs']) ? $translations['Ajouter des voyageurs'] : 'Ajouter des voyageurs'; ?>" value="<?php echo $voyageurs; ?>">
+            </div>
+            <button type="submit"><img src="image/loupe.png" alt="Search"></button>
+        </form>
 
-            $params = [];
+        <div class="row">
+            <?php
+            try {
+                $query = "SELECT LOGEMENT.*, PHOTO_LOGEMENT.emplacement AS photo 
+                          FROM LOGEMENT 
+                          LEFT JOIN PHOTO_LOGEMENT ON LOGEMENT.id = PHOTO_LOGEMENT.id_LOGEMENT 
+                          WHERE 1=1";
 
-            if ($searchTerm) {
-                $query .= " AND (LOGEMENT.description LIKE :search OR LOGEMENT.nom LIKE :search)";
-                $params['search'] = '%' . $searchTerm . '%';
-            }
+                $params = [];
 
-            if ($filter) {
-                $query .= " AND (LOGEMENT.description LIKE :filter OR LOGEMENT.nom LIKE :filter)";
-                $params['filter'] = '%' . $filter . '%';
-            }
+                if ($searchTerm) {
+                    $query .= " AND (LOGEMENT.description LIKE :search OR LOGEMENT.nom LIKE :search)";
+                    $params['search'] = '%' . $searchTerm . '%';
+                }
 
-            if ($pays) {
-                $query .= " AND LOGEMENT.pays = :pays";
-                $params['pays'] = $pays;
-            }
+                if ($filter) {
+                    $query .= " AND (LOGEMENT.description LIKE :filter OR LOGEMENT.nom LIKE :filter)";
+                    $params['filter'] = '%' . $filter . '%';
+                }
 
-            if ($voyageurs > 0) {
-                $query .= " AND LOGEMENT.capacite_location >= :voyageurs";
-                $params['voyageurs'] = $voyageurs;
-            }
+                if ($pays) {
+                    $query .= " AND LOGEMENT.pays = :pays";
+                    $params['pays'] = $pays;
+                }
 
-            if ($arrivee && $depart) {
-                $query .= " AND LOGEMENT.id IN (
-                                SELECT id_LOGEMENT 
-                                FROM DATE_DISPO 
-                                WHERE date BETWEEN :arrivee AND :depart
-                                AND id_LOGEMENT NOT IN (
+                if ($voyageurs > 0) {
+                    $query .= " AND LOGEMENT.capacite_location >= :voyageurs";
+                    $params['voyageurs'] = $voyageurs;
+                }
+
+                if ($arrivee && $depart) {
+                    $query .= " AND LOGEMENT.id IN (
                                     SELECT id_LOGEMENT 
-                                    FROM DATE_RESERVE 
+                                    FROM DATE_DISPO 
                                     WHERE date BETWEEN :arrivee AND :depart
+                                    AND id_LOGEMENT NOT IN (
+                                        SELECT id_LOGEMENT 
+                                        FROM DATE_RESERVE 
+                                        WHERE date BETWEEN :arrivee AND :depart
+                                    )
                                 )
-                            )
-                            AND LOGEMENT.id NOT IN (
-                                SELECT id_LOGEMENT 
-                                FROM LOCATION 
-                                WHERE :arrivee BETWEEN date_debut AND date_fin
-                                OR :depart BETWEEN date_debut AND date_fin
-                                OR date_debut BETWEEN :arrivee AND :depart
-                                OR date_fin BETWEEN :arrivee AND :depart
-                            )";
-                $params['arrivee'] = $arrivee;
-                $params['depart'] = $depart;
-            }
+                                AND LOGEMENT.id NOT IN (
+                                    SELECT id_LOGEMENT 
+                                    FROM LOCATION 
+                                    WHERE :arrivee BETWEEN date_debut AND date_fin
+                                    OR :depart BETWEEN date_debut AND date_fin
+                                    OR date_debut BETWEEN :arrivee AND :depart
+                                    OR date_fin BETWEEN :arrivee AND :depart
+                                )";
+                    $params['arrivee'] = $arrivee;
+                    $params['depart'] = $depart;
+                }
 
-            $query .= " GROUP BY LOGEMENT.id ORDER BY LOGEMENT.id";
+                $query .= " GROUP BY LOGEMENT.id ORDER BY LOGEMENT.id";
 
-            $stmt = $bdd->prepare($query);
-            $stmt->execute($params);
+                $stmt = $bdd->prepare($query);
+                $stmt->execute($params);
 
-            if ($stmt->rowCount() > 0) {
-                while ($logement = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    echo '<div class="col-md-4 col-sm-6 mb-3">';
-                    echo '<div class="card">';
-                    echo '<img src="' . htmlspecialchars($logement['photo']) . '" class="card-img-top" alt="Photo du logement">';
-                    echo '<div class="card-body">';
-                    echo '<h5 class="card-title">' . htmlspecialchars($logement['nom']) . '</h5>';
-                    echo '<p class="card-text">' . htmlspecialchars(truncate_text($logement['description'])) . '</p>';
-                    echo '<p class="card-text"><small class="text-muted">' . $translations['Prix'] . ': ' . htmlspecialchars($logement['prix']) . '€ ' . $translations['par nuit'] . '</small></p>';
-                    echo '<a href="detail_logement.php?id=' . $logement['id'] . '" class="btn btn-primary">' . $translations['Réserver'] . '</a>';
-                    echo '</div>';
-                    echo '</div>';
+                if ($stmt->rowCount() > 0) {
+                    while ($logement = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        echo '<div class="col-md-4 col-sm-6 mb-3">';
+                        echo '<div class="card">';
+                        echo '<img src="' . htmlspecialchars($logement['photo']) . '" class="card-img-top" alt="Photo du logement">';
+                        echo '<div class="card-body">';
+                        echo '<h5 class="card-title">' . htmlspecialchars($logement['nom']) . '</h5>';
+                        echo '<p class="card-text">' . htmlspecialchars(truncate_text($logement['description'])) . '</p>';
+                        echo '<p class="card-text"><small class="text-muted">' . $translations['Prix'] . ': ' . htmlspecialchars($logement['prix']) . '€ ' . $translations['par nuit'] . '</small></p>';
+                        echo '<a href="detail_logement.php?id=' . $logement['id'] . '" class="btn btn-primary">' . $translations['Réserver'] . '</a>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                } else {
+                    echo '<div class="col-12 text-center">';
+                    echo '<p>' . $translations['Aucune location ne correspond à vos besoins.'] . '</p>';
                     echo '</div>';
                 }
-            } else {
-                echo '<div class="col-12 text-center">';
-                echo '<p>Aucune location ne correspond à vos besoins.</p>';
-                echo '</div>';
+            } catch (PDOException $e) {
+                echo 'Erreur lors de la récupération des logements: ' . $e->getMessage();
             }
-        } catch (PDOException $e) {
-            echo 'Erreur lors de la récupération des logements: ' . $e->getMessage();
-        }
-        ?>
-    </div>
-</main>
+            ?>
+        </div>
+    </main>
+    <?php include 'chatbot.php'; ?>
+    <?php require_once 'footer.php'; ?>
 
-<?php require_once 'footer.php'; ?>
-
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

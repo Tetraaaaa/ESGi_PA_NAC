@@ -13,13 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_service = intval($_POST['id_service']);
     $id_logement = intval($_POST['id_logement']);
 
-    // Validation des entrées
     if (empty($demande) || $id_service <= 0 || $id_logement <= 0) {
         echo '<p>Erreur : Données invalides.</p>';
         exit;
     }
 
-    // Préparation de la requête pour insérer les données dans la table SELECTIONNE
+    
     $stmt = $bdd->prepare("INSERT INTO SELECTIONNE (id_LOGEMENT, id_SERVICE, status, demande) 
                            VALUES (:id_logement, :id_service, 'demande envoyée', :demande)");
     $stmt->bindParam(':id_logement', $id_logement, PDO::PARAM_INT);

@@ -15,27 +15,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $demande_user_id = $_POST['demande_user_id'];
     $current_user_id = $_SESSION['id'];
 
-    // Définir le répertoire de téléchargement
+  
     $uploadDir = 'chat-pic/';
     $uploadFile = $uploadDir . basename($image['name']);
 
-    // Générer un nom de fichier unique
+ 
     $fileInfo = pathinfo($uploadFile);
     $uploadFile = $uploadDir . $fileInfo['filename'] . '_' . time() . '.' . $fileInfo['extension'];
 
-    // Déplacer le fichier téléchargé
+
     if (move_uploaded_file($image['tmp_name'], $uploadFile)) {
-        // Obtenir les dimensions de l'image
+  
         list($width, $height) = getimagesize($uploadFile);
 
-        // Insérer un enregistrement dans la table MESSAGE
+
         $stmt = $bdd->prepare("INSERT INTO MESSAGE (id_USER_ENVOIE, id_USER_RECOIS, text, date_envoie, image) VALUES (:id_user_envoie, :id_user_recois, '', NOW(), NULL)");
         $stmt->bindParam(':id_user_envoie', $current_user_id, PDO::PARAM_INT);
         $stmt->bindParam(':id_user_recois', $demande_user_id, PDO::PARAM_INT);
         $stmt->execute();
         $id_message = $bdd->lastInsertId();
 
-        // Insérer un enregistrement dans la table PHOTO_CHAT
+
         $stmt = $bdd->prepare("INSERT INTO PHOTO_CHAT (id_MESSAGE, emplacement, largeur, hauteur) VALUES (:id_message, :emplacement, :largeur, :hauteur)");
         $stmt->bindParam(':id_message', $id_message, PDO::PARAM_INT);
         $stmt->bindParam(':emplacement', $uploadFile, PDO::PARAM_STR);

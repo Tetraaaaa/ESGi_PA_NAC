@@ -10,82 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/header.css">
-    <style>
-        .chat-box {
-            height: 400px;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .chat-input-wrapper {
-            display: flex;
-            align-items: center;
-        }
-        .chat-input {
-            flex: 1;
-            resize: none;
-            border-radius: 15px;
-            background-color: #f1f1f1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-        .chat-box-content {
-            display: flex;
-            flex-direction: column;
-        }
-        .message-sent {
-            align-self: flex-end;
-            background-color: #d1e7dd;
-            padding: 5px 10px;
-            border-radius: 10px;
-            margin-bottom: 5px;
-            max-width: 80%;
-        }
-        .message-received {
-            align-self: flex-start;
-            background-color: #f8d7da;
-            padding: 5px 10px;
-            border-radius: 10px;
-            margin-bottom: 5px;
-            max-width: 80%;
-        }
-        .upload-btn-wrapper {
-            position: relative;
-        }
-        .upload-btn-wrapper .btn {
-            border-radius: 50%;
-            padding: 10px 15px;
-        }
-        .upload-btn-wrapper input[type=file] {
-            font-size: 100px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-        }
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .transparent-background {
-            background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-        .transparent-background .list-group-item {
-            background-color: rgba(255, 255, 255, 0.5);
-            color: #000;
-        }
-        .transparent-background .btn {
-            color: #000;
-        }
-    </style>
+    <link rel="stylesheet" href="css/consulter_demande_client.css">
 </head>
 <body>
     <?php 
@@ -129,14 +54,15 @@
     $stmt->execute();
     $demande = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$demande) {
-        echo '<p>Aucune demande trouvée.</p>';
+    if (!$demande || $demande['id_USER'] !== $_SESSION['id']) {
+        echo '<p>Vous n\'êtes pas autorisé à accéder à cette page.</p>';
+        header('Location: index.php');
         exit;
     }
     
     $demande_user_id = $demande['id_USER'];
 
-    // Récupérer les factures associées
+    
     if ($id_location) {
         $stmtFactures = $bdd->prepare("
             SELECT * FROM FACTURE
@@ -156,7 +82,7 @@
     $stmtFactures->execute();
     $factures = $stmtFactures->fetchAll(PDO::FETCH_ASSOC);
 
-    // Récupérer les interventions associées
+    
     if ($id_location) {
         $stmtInterventions = $bdd->prepare("
             SELECT * FROM INTERVENTION_SERVICE
@@ -237,7 +163,7 @@
                         <input type="file" id="imageInput" name="image" accept="image/*">
                     </div>
                 </div>
-                <!-- Modal pour afficher l'image agrandie -->
+                
                 <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -256,83 +182,83 @@
     </main>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            const id_service = <?php echo json_encode($id_service); ?>;
-            const id_location = <?php echo json_encode($id_location); ?>;
-            const id_logement = <?php echo json_encode($id_logement); ?>;
-            const demande_user_id = <?php echo json_encode($demande_user_id); ?>;
+    $(document).ready(function() {
+        const id_service = <?php echo json_encode($id_service); ?>;
+        const id_location = <?php echo json_encode($id_location); ?>;
+        const id_logement = <?php echo json_encode($id_logement); ?>;
+        const demande_user_id = <?php echo json_encode($demande_user_id); ?>;
 
-            function loadMessages() {
-                $.ajax({
-                    url: 'load_messages_client.php',
-                    method: 'GET',
-                    data: {
-                        id_service: id_service,
-                        id_location: id_location,
-                        id_logement: id_logement,
-                        demande_user_id: demande_user_id
-                    },
-                    success: function(data) {
-                        $('#chatBox').html(data);
-                        $('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
-                    }
-                });
-            }
-
-            function sendMessage() {
-                const message = $('#chatInput').val().trim();
-                if (message !== '') {
-                    $.post('send_message_client.php', {
-                        message: message,
-                        id_service: id_service,
-                        id_location: id_location,
-                        id_logement: id_logement,
-                        demande_user_id: demande_user_id
-                    }, function() {
-                        $('#chatInput').val('');
-                        loadMessages();
-                    });
-                }
-            }
-
-            $('#chatInput').on('keypress', function(e) {
-                if (e.which === 13 && !e.shiftKey) {
-                    sendMessage();
-                    e.preventDefault();
+        function loadMessages() {
+            $.ajax({
+                url: 'load_messages_client.php',
+                method: 'GET',
+                data: {
+                    id_service: id_service,
+                    id_location: id_location,
+                    id_logement: id_logement,
+                    demande_user_id: demande_user_id
+                },
+                success: function(data) {
+                    $('#chatBox').html(data);
+                    $('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
                 }
             });
+        }
 
-            $('#imageInput').on('change', function() {
-                const formData = new FormData();
-                formData.append('image', this.files[0]);
-                formData.append('id_service', id_service);
-                formData.append('id_location', id_location);
-                formData.append('id_logement', id_logement);
-                formData.append('demande_user_id', demande_user_id);
-
-                $.ajax({
-                    url: 'upload_image.php',
-                    method: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(data) {
-                        loadMessages();
-                    }
+        function sendMessage() {
+            const message = $('#chatInput').val().trim();
+            if (message !== '') {
+                $.post('send_message_client.php', {
+                    message: message,
+                    id_service: id_service,
+                    id_location: id_location,
+                    id_logement: id_logement,
+                    demande_user_id: demande_user_id
+                }, function() {
+                    $('#chatInput').val('');
+                    loadMessages();
                 });
-            });
+            }
+        }
 
-            $('#chatBox').on('click', 'img', function() {
-                const src = $(this).attr('src');
-                $('#modalImage').attr('src', src);
-                $('#imageModal').modal('show');
-            });
-
-            loadMessages();
-
-            // Charger les messages toutes les 5 secondes
-            setInterval(loadMessages, 5000);
+        $('#chatInput').on('keypress', function(e) {
+            if (e.which === 13 && !e.shiftKey) {
+                sendMessage();
+                e.preventDefault();
+            }
         });
+
+        $('#imageInput').on('change', function() {
+            const formData = new FormData();
+            formData.append('image', this.files[0]);
+            formData.append('id_service', id_service);
+            formData.append('id_location', id_location);
+            formData.append('id_logement', id_logement);
+            formData.append('demande_user_id', demande_user_id);
+
+            $.ajax({
+                url: 'upload_image.php',
+                method: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    loadMessages();
+                }
+            });
+        });
+
+        $('#chatBox').on('click', 'img', function() {
+            const src = $(this).attr('src');
+            $('#modalImage').attr('src', src);
+            $('#imageModal').modal('show');
+        });
+
+        loadMessages();
+
+        
+        setInterval(loadMessages, 5000);
+    });
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -10,70 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/header.css">
-    <style>
-        .chat-box {
-            height: 400px;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .chat-input-wrapper {
-            display: flex;
-            align-items: center;
-        }
-        .chat-input {
-            flex: 1;
-            resize: none;
-            border-radius: 15px;
-            background-color: #f1f1f1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-        .chat-box-content {
-            display: flex;
-            flex-direction: column;
-        }
-        .message-sent {
-            align-self: flex-end;
-            background-color: #d1e7dd;
-            padding: 5px 10px;
-            border-radius: 10px;
-            margin-bottom: 5px;
-            max-width: 80%;
-        }
-        .message-received {
-            align-self: flex-start;
-            background-color: #f8d7da;
-            padding: 5px 10px;
-            border-radius: 10px;
-            margin-bottom: 5px;
-            max-width: 80%;
-        }
-        .upload-btn-wrapper {
-            position: relative;
-        }
-        .upload-btn-wrapper .btn {
-            border-radius: 50%;
-            padding: 10px 15px;
-        }
-        .upload-btn-wrapper input[type=file] {
-            font-size: 100px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-        }
-        .transparent-background {
-            background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/consulter_location_client.css">
 </head>
 <body>
     <?php
@@ -105,7 +42,7 @@
     $locataire_id = $location['id_USER'];
     $logement_id = $location['id_LOGEMENT'];
 
-    // Récupérer l'ID du propriétaire du logement
+    
     $stmt = $bdd->prepare("
         SELECT id_USER AS proprietaire_id
         FROM LOGEMENT
@@ -122,6 +59,14 @@
 
     $proprietaire_id = $logement['proprietaire_id'];
 
+    
+    $stmt = $bdd->prepare("
+        SELECT * FROM ETAT
+        WHERE id_location = :id_location
+    ");
+    $stmt->bindParam(':id_location', $id_location, PDO::PARAM_INT);
+    $stmt->execute();
+    $etats = $stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
     <main class="container mt-4">
         <div class="row">
@@ -135,11 +80,28 @@
                         <p class="card-text"><strong>Date de fin:</strong> <?php echo isset($location['date_fin']) ? htmlspecialchars(date('d-m-Y', strtotime($location['date_fin']))) : 'N/A'; ?></p>
                     </div>
                 </div>
+                <?php if (!empty($etats)): ?>
+                    <h3>États des lieux</h3>
+                    <ul class="list-group mb-4">
+                        <?php foreach ($etats as $etat): ?>
+                            <li class="list-group-item d-flex justify-content-between align-items-center etat-des-lieux-item">
+                                <span><?php echo htmlspecialchars($etat['date']); ?> - <?php echo htmlspecialchars($etat['type']); ?></span>
+                                <div>
+                                    <a href="<?php echo htmlspecialchars($etat['emplacement']); ?>" class="btn btn-primary btn-sm">Voir l'état des lieux</a>
+                                    <?php if (empty($etat['valide'])): ?>
+                                        <button class="btn btn-success btn-sm" onclick="changerEtat(<?php echo $etat['id']; ?>, 'validé')">Valider</button>
+                                        <button class="btn btn-danger btn-sm" onclick="changerEtat(<?php echo $etat['id']; ?>, 'refuté')">Réfuter</button>
+                                    <?php endif; ?>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
             </div>
             <div class="col-md-6">
                 <h2>Chat</h2>
                 <div class="chat-box chat-box-content" id="chatBox">
-                    <!-- Les messages seront chargés ici -->
+                   
                 </div>
                 <div class="chat-input-wrapper">
                     <textarea id="chatInput" class="chat-input" placeholder="Tapez votre message..."></textarea>
@@ -148,7 +110,7 @@
                         <input type="file" id="imageInput" name="image" accept="image/*">
                     </div>
                 </div>
-                <!-- Modal pour afficher l'image agrandie -->
+                
                 <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -167,6 +129,18 @@
     </main>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+    function changerEtat(id, etat) {
+        console.log('changerEtat', id, etat); //debug
+        $.post('changer_etat.php', {
+            id: id,
+            valide: etat
+        }, function(response) {
+            console.log('response', response); //debug
+            alert(response.message);
+            location.reload();
+        }, 'json');
+    }
+
     $(document).ready(function() {
         const id_location = <?php echo json_encode($id_location); ?>;
         const id_locataire = <?php echo json_encode($locataire_id); ?>;
@@ -237,7 +211,7 @@
 
         loadMessages();
 
-        // Charger les messages toutes les 5 secondes
+        
         setInterval(loadMessages, 5000);
     });
     </script>

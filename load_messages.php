@@ -8,7 +8,7 @@ $id_logement = $_GET['id_logement'];
 $demande_user_id = $_GET['demande_user_id'];
 $current_user_id = $_SESSION['id'];
 
-// Requête pour récupérer les messages texte
+
 $stmt = $bdd->prepare("
     SELECT MESSAGE.*, USER.nom, USER.prenom 
     FROM MESSAGE 
@@ -22,7 +22,7 @@ $stmt->bindParam(':demande_user_id', $demande_user_id, PDO::PARAM_INT);
 $stmt->execute();
 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Requête pour récupérer les messages avec photos
+
 $stmt = $bdd->prepare("
     SELECT MESSAGE.*, PHOTO_CHAT.emplacement, PHOTO_CHAT.largeur, PHOTO_CHAT.hauteur, USER.nom, USER.prenom 
     FROM MESSAGE 
@@ -37,7 +37,7 @@ $stmt->bindParam(':demande_user_id', $demande_user_id, PDO::PARAM_INT);
 $stmt->execute();
 $photo_messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Afficher les messages texte
+
 foreach ($messages as $message) {
     $alignment = $message['id_USER_ENVOIE'] == $current_user_id ? 'message-sent' : 'message-received';
     echo '<div class="' . $alignment . '">';
@@ -46,7 +46,7 @@ foreach ($messages as $message) {
     echo '</div>';
 }
 
-// Afficher les messages avec photos
+
 foreach ($photo_messages as $message) {
     $alignment = $message['id_USER_ENVOIE'] == $current_user_id ? 'message-sent' : 'message-received';
     echo '<div class="' . $alignment . '">';

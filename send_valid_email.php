@@ -8,24 +8,22 @@ function sendValidationEmail($email, $code) {
     $mail = new PHPMailer(true);
 
     try {
-        // Paramètres du serveur
+       
         $mail->isSMTP();
-        $mail->Host = 'ssl0.ovh.net'; // Host SMTP pour OVH
+        $mail->Host = 'ssl0.ovh.net'; 
         $mail->SMTPAuth = true;
-        $mail->Username = 'noreply@nac.ovh'; // Votre adresse email complète
-        $mail->Password = 'Azerty11!'; // Votre mot de passe
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Activer le cryptage SSL
-        $mail->Port = 465; // Port SMTP pour SSL
-
-        // Destinataire
-        $mail->setFrom('noreply@nac.ovh', 'PCS'); // Votre adresse et nom
+        $mail->Username = 'noreply@nac.ovh'; 
+        $mail->Password = 'Azerty11!'; 
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; 
+        $mail->Port = 465; 
+       
+        $mail->setFrom('noreply@nac.ovh', 'PCS'); 
         $mail->addAddress($email);
 
-        // Contenu de l'email
-        $mail->isHTML(true); // Format de l'email en HTML
+       
+        $mail->isHTML(true); 
         $mail->Subject = 'Votre code de validation';
 
-        // Contenu HTML de l'email
         $mail->Body = '
         <html>
         <head>
@@ -106,10 +104,10 @@ function sendValidationEmail($email, $code) {
         </body>
         </html>';
 
-        // Contenu texte alternatif pour les clients email sans support HTML
+        
         $mail->AltBody = "Votre code de validation est : $code";
 
-        // Activer le mode débogage , 1 client, 2 client - serveur
+        
         $mail->SMTPDebug = 2;
         $mail->Debugoutput = 'html';
 

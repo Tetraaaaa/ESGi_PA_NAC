@@ -1,8 +1,6 @@
 <?php
 session_start();
-ini_set('display_errors', 1);
 
-// Vérifier si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     require 'include/db.php'; 
@@ -21,7 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $code = $_POST['code'];
     $pays = $_POST['pays'];
 
-    // Tableau de correspondance pour les types de logement
     $type_logement_map = [
         "appartement" => 1,
         "maison" => 2,
@@ -30,16 +27,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "maison_partagee" => 5
     ];
 
-    // Obtenir la valeur entière correspondante pour type_logement
+
     $type_logement = $type_logement_map[$_POST['type_logement']] ?? null;  
 
     $horaires = isset($_POST['horaires']) ? join(', ', $_POST['horaires']) : '';
-    // Traitement des heures de contact
+   
     $selected_times = isset($_POST['horaires']) ? $_POST['horaires'] : [];
     $first_time = !empty($selected_times) ? substr($selected_times[0], 0, 5) : '00:00'; 
 
     $capacite_location = $_POST['capacite_location'];
-    // Préparation de la requête SQL pour éviter les injections SQL
     $insertQuery = "INSERT INTO LOGEMENT (id_user, id, nom, description, adresse, ville, prix, code_postal, pays, type_bien, heure_de_contacte, capacite_location) VALUES (:id_user, :id, :nom, :description, :adresse, :ville, :prix, :code_postal, :pays, :type_bien, :heure_de_contacte, :capacite_location)";
     $insertStmt = $bdd->prepare($insertQuery);
     $insertStmt->execute([
@@ -58,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ]);
 
     if ($insertStmt) {
-        // Insertion des caractéristiques sélectionnées
+        
         if (!empty($_POST['caracteristiques'])) {
             foreach ($_POST['caracteristiques'] as $caracteristique_id) {
                 $insertCaracQuery = "INSERT INTO CARACTERISTIQUE_LOGEMENT (id_logement, id_caracteristique) VALUES (:id_logement, :id_caracteristique)";
@@ -70,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        // Traitement des photos
+        
         if (!empty($_FILES['photos']['name'][0])) {
             foreach ($_FILES['photos']['tmp_name'] as $key => $value) {
                 $file_tmp = $_FILES['photos']['tmp_name'][$key];

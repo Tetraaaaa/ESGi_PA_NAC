@@ -10,70 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/header.css">
-    <style>
-        .chat-box {
-            height: 400px;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .chat-input-wrapper {
-            display: flex;
-            align-items: center;
-        }
-        .chat-input {
-            flex: 1;
-            resize: none;
-            border-radius: 15px;
-            background-color: #f1f1f1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-        .chat-box-content {
-            display: flex;
-            flex-direction: column;
-        }
-        .message-sent {
-            align-self: flex-end;
-            background-color: #d1e7dd;
-            padding: 5px 10px;
-            border-radius: 10px;
-            margin-bottom: 5px;
-            max-width: 80%;
-        }
-        .message-received {
-            align-self: flex-start;
-            background-color: #f8d7da;
-            padding: 5px 10px;
-            border-radius: 10px;
-            margin-bottom: 5px;
-            max-width: 80%;
-        }
-        .upload-btn-wrapper {
-            position: relative;
-        }
-        .upload-btn-wrapper .btn {
-            border-radius: 50%;
-            padding: 10px 15px;
-        }
-        .upload-btn-wrapper input[type=file] {
-            font-size: 100px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-        }
-        .transparent-background {
-            background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/consulter_location.css">
 </head>
 <body>
     <?php
@@ -122,6 +59,14 @@
 
     $proprietaire_id = $logement['proprietaire_id'];
 
+    // Récupérer les états des lieux associés à la location
+    $stmt = $bdd->prepare("
+        SELECT * FROM ETAT
+        WHERE id_location = :id_location
+    ");
+    $stmt->bindParam(':id_location', $id_location, PDO::PARAM_INT);
+    $stmt->execute();
+    $etats = $stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
     <main class="container mt-4">
         <div class="row">
@@ -133,8 +78,22 @@
                         <p class="card-text"><strong>ID Locataire:</strong> <?php echo htmlspecialchars($locataire_id); ?></p>
                         <p class="card-text"><strong>Date de début:</strong> <?php echo isset($location['date_debut']) ? htmlspecialchars(date('d-m-Y', strtotime($location['date_debut']))) : 'N/A'; ?></p>
                         <p class="card-text"><strong>Date de fin:</strong> <?php echo isset($location['date_fin']) ? htmlspecialchars(date('d-m-Y', strtotime($location['date_fin']))) : 'N/A'; ?></p>
+                        <button class="btn btn-primary" onclick="window.location.href='creer_etat_des_lieux.php?id_location=<?php echo htmlspecialchars($id_location); ?>'">Créer un état des lieux</button>
                     </div>
                 </div>
+                <?php if (!empty($etats)): ?>
+                    <h3>États des lieux</h3>
+                    <ul class="list-group mb-4">
+                        <?php foreach ($etats as $etat): ?>
+                            <li class="list-group-item d-flex justify-content-between align-items-center etat-des-lieux-item">
+                                <span><?php echo htmlspecialchars($etat['date']); ?> - <?php echo htmlspecialchars($etat['type']); ?></span>
+                                <div>
+                                    <a href="<?php echo htmlspecialchars($etat['emplacement']); ?>" class="btn btn-primary btn-sm">Voir l'état des lieux</a>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
             </div>
             <div class="col-md-6">
                 <h2>Chat</h2>

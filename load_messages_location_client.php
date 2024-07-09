@@ -6,7 +6,7 @@ $id_location = $_GET['id_location'];
 $id_locataire = $_GET['id_locataire'];
 $id_proprietaire = $_GET['id_proprietaire'];
 
-// Récupérer les messages
+
 $stmt = $bdd->prepare("
     SELECT MESSAGE.*, USER.nom, USER.prenom 
     FROM MESSAGE 

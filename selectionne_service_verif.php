@@ -12,13 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_service = intval($_POST['id_service']);
     $id_location = intval($_POST['id_location']);
 
-    // Validation des entrées
+   
     if (empty($demande) || $id_service <= 0 || $id_location <= 0) {
         echo '<p>Erreur : Données invalides.</p>';
         exit;
     }
 
-    // Préparation de la requête pour insérer les données dans la table FAIT_APPELLE
+    
     $stmt = $bdd->prepare("INSERT INTO FAIT_APPELLE (id_LOCATION, id_SERVICE, status, demande) 
                            VALUES (:id_location, :id_service, 'demande envoyée', :demande)");
     $stmt->bindParam(':id_location', $id_location, PDO::PARAM_INT);

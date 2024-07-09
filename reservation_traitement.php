@@ -1,9 +1,8 @@
 <?php
 session_start();
 include 'include/db.php';
-include "apikey.php"; // Fournit la clé d'API Stripe
-
-$errors = []; // Tableau pour stocker les erreurs
+include "apikey.php"; 
+$errors = []; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $logement_id = $_POST['logement_id'];
@@ -13,13 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         $charge = \Stripe\Charge::create([
-            'amount' => $prix * 100, // Montant en centimes
+            'amount' => $prix * 100, 
             'currency' => 'eur',
             'source' => $token,
-            'description' => 'Paiement pour réservation de logement ' . $logement_id // Correction de la concaténation
+            'description' => 'Paiement pour réservation de logement ' . $logement_id 
         ]);
 
-        // Rediriger vers une page de confirmation si le paiement est réussi
+        
         header("Location: confirmation.php");
         exit();
     } catch (\Stripe\Exception\CardException $e) {
@@ -35,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Afficher les erreurs
+
 if (!empty($errors)) {
     foreach ($errors as $error) {
         echo '<div class="alert alert-danger" role="alert">' . htmlspecialchars($error) . '</div>';

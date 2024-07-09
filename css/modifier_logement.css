@@ -1,0 +1,44 @@
+.form-check {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .form-check input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+    }
+    .form-check i {
+      margin-right: 10px;
+      font-size: 1.2em;
+    }
+    .form-check label {
+      margin-left: 5px;
+      position: relative;
+      padding-left: 30px;
+      cursor: pointer;
+    }
+    .form-check label:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background-color: #fff;
+    }
+    .form-check input[type="checkbox"]:checked + label:before {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .form-check input[type="checkbox"]:checked + label:after {
+      content: '\f00c';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      position: absolute;
+      left: 4px;
+      top: 0;
+      font-size: 14px;
+      color: #fff;
+    }

@@ -27,6 +27,8 @@ switch ($_SESSION['status']) {
                 <p><strong>Prénom:</strong> ' . htmlspecialchars($_SESSION['prenom']) . '</p>
                 <p><strong>Âge:</strong> ' . htmlspecialchars($_SESSION['age']) . '</p>
                 <p><strong>Statut:</strong> Administrateur</p>
+                <a href="mettre_en_vente_un_service.php" class="btn btn-secondary"><?php echo "Valider la photo de profil"; ?></a>
+
                 <a href="logout.php" class="btn btn-danger">Déconnexion</a>
             </div>
         </body>

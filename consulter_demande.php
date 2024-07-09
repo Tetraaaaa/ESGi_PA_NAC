@@ -10,89 +10,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/header.css">
-    <style>
-        .chat-box {
-            height: 400px;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .chat-input-wrapper {
-            display: flex;
-            align-items: center;
-        }
-        .chat-input {
-            flex: 1;
-            resize: none;
-            border-radius: 15px;
-            background-color: #f1f1f1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-        .chat-box-content {
-            display: flex;
-            flex-direction: column;
-        }
-        .message-sent {
-            align-self: flex-end;
-            background-color: #d1e7dd;
-            padding: 5px 10px;
-            border-radius: 10px;
-            margin-bottom: 5px;
-            max-width: 80%;
-        }
-        .message-received {
-            align-self: flex-start;
-            background-color: #f8d7da;
-            padding: 5px 10px;
-            border-radius: 10px;
-            margin-bottom: 5px;
-            max-width: 80%;
-        }
-        .upload-btn-wrapper {
-            position: relative;
-        }
-        .upload-btn-wrapper .btn {
-            border-radius: 50%;
-            padding: 10px 15px;
-        }
-        .upload-btn-wrapper input[type=file] {
-            font-size: 100px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-        }
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .transparent-background {
-            background-color: rgba(255, 255, 255, 0.5); /* Fond transparent */
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-        .transparent-background .list-group-item {
-            background-color: rgba(255, 255, 255, 0.5); /* Fond transparent pour les items */
-            color: #000; /* Texte en noir pour la lisibilité */
-        }
-        .transparent-background .btn {
-            color: #000;
-        }
-    </style>
+    <link rel="stylesheet" href="css/consulter_demande.css">
 </head>
 <body>
     <?php 
     require_once 'include/connection_db.php'; 
     session_start();
     require_once 'header.php'; 
-    
+
     if (!isset($_GET['id_service']) || (!isset($_GET['id_location']) && !isset($_GET['id_logement']))) {
         echo '<p>Erreur : Données manquantes.</p>';
         exit;
@@ -101,6 +26,18 @@
     $id_service = $_GET['id_service'];
     $id_location = isset($_GET['id_location']) ? $_GET['id_location'] : null;
     $id_logement = isset($_GET['id_logement']) ? $_GET['id_logement'] : null;
+    $user_id = $_SESSION['id'];
+
+    // Vérifier que l'utilisateur possède bien le service
+    $stmtService = $bdd->prepare("SELECT id_USER FROM SERVICE WHERE id = :id_service");
+    $stmtService->bindParam(':id_service', $id_service, PDO::PARAM_INT);
+    $stmtService->execute();
+    $service = $stmtService->fetch(PDO::FETCH_ASSOC);
+
+    if (!$service || $service['id_USER'] != $user_id) {
+        echo '<p>Vous n\'êtes pas autorisé à accéder à cette page.</p>';
+        exit;
+    }
 
     if ($id_location) {
         $stmt = $bdd->prepare("
@@ -133,10 +70,9 @@
         echo '<p>Aucune demande trouvée.</p>';
         exit;
     }
-    
+
     $demande_user_id = $demande['id_USER'];
 
-    // Récupérer les factures associées
     if ($id_location) {
         $stmtFactures = $bdd->prepare("
             SELECT * FROM FACTURE
@@ -156,7 +92,6 @@
     $stmtFactures->execute();
     $factures = $stmtFactures->fetchAll(PDO::FETCH_ASSOC);
 
-    // Récupérer les interventions associées
     if ($id_location) {
         $stmtInterventions = $bdd->prepare("
             SELECT * FROM INTERVENTION_SERVICE
@@ -229,7 +164,7 @@
             <div class="col-md-6">
                 <h2>Chat</h2>
                 <div class="chat-box chat-box-content" id="chatBox">
-                    <!-- Les messages seront chargés ici -->
+                    
                 </div>
                 <div class="chat-input-wrapper">
                     <textarea id="chatInput" class="chat-input" placeholder="Tapez votre message..."></textarea>
@@ -238,7 +173,7 @@
                         <input type="file" id="imageInput" name="image" accept="image/*">
                     </div>
                 </div>
-                <!-- Modal pour afficher l'image agrandie -->
+                
                 <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -333,7 +268,6 @@
 
         loadMessages();
 
-        // Charger les messages toutes les 5 secondes
         setInterval(loadMessages, 5000);
 
         $('#terminerService').on('click', function() {

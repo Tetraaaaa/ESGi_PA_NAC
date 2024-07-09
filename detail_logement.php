@@ -1,3 +1,39 @@
+<?php
+session_start();
+require_once 'include/connection_db.php';
+
+$logementId = isset($_GET['id']) ? $_GET['id'] : 0;
+$datesDisponibles = [];
+if ($logementId) {
+    $query = $bdd->prepare("SELECT * FROM DATE_DISPO WHERE id_LOGEMENT = :id_LOGEMENT");
+    $query->execute(['id_LOGEMENT' => $logementId]);
+    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        $datesDisponibles[] = $row['date'];
+    }
+}
+$datesReservees = [];
+if ($logementId) {
+    $reservedDatesQuery = $bdd->prepare("SELECT date FROM DATE_RESERVE WHERE id_LOGEMENT = :id_LOGEMENT");
+    $reservedDatesQuery->execute(['id_LOGEMENT' => $logementId]);
+    while ($row = $reservedDatesQuery->fetch(PDO::FETCH_ASSOC)) {
+        $datesReservees[] = $row['date'];
+    }
+    $datesReserveesJson = json_encode($datesReservees);
+    echo "<script>var datesReservees = $datesReserveesJson;</script>";
+}
+$datesJson = json_encode($datesDisponibles);
+echo "<script>var datesDisponibles = $datesJson;</script>";
+if ($logementId) {
+    $query = $bdd->prepare("SELECT * FROM LOGEMENT WHERE id = :id");
+    $query->execute(['id' => $logementId]);
+    $logement = $query->fetch(PDO::FETCH_ASSOC);
+
+    $imgQuery = $bdd->prepare("SELECT * FROM PHOTO_LOGEMENT WHERE id_LOGEMENT = :id_LOGEMENT");
+    $imgQuery->execute(['id_LOGEMENT' => $logementId]);
+    $images = $imgQuery->fetchAll(PDO::FETCH_ASSOC);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,78 +46,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/footer.css"> <!-- Assurez-vous que le fichier CSS du footer est inclus -->
-    <style>
-        .carousel-control-prev, .carousel-control-next {
-            background: none;
-            border: none;
-            color: black;
-        }
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-            background-image: none;
-        }
-        .carousel-control-prev-icon:after,
-        .carousel-control-next-icon:after {
-            content: '❮';
-            font-size: 24px;
-            color: black;
-        }
-        .carousel-control-next-icon:after {
-            content: '❯';
-        }
-        .carousel-img {
-            height: 300px;
-            width: auto;
-            margin: auto;
-            display: block;
-        }
-        .modal-img {
-            width: 100%;
-            height: auto;
-        }
-        .main-content {
-            min-height: calc(100vh - 200px); /* Ajustez cette valeur en fonction de la hauteur de votre header et footer */
-        }
-    </style>
+    <link rel="stylesheet" href="css/detail_logement.css">
 </head>
 <body>
-    <?php
-    session_start();
-    require_once 'include/connection_db.php';
-
-    $logementId = isset($_GET['id']) ? $_GET['id'] : 0;
-    $datesDisponibles = [];
-    if ($logementId) {
-        $query = $bdd->prepare("SELECT * FROM DATE_DISPO WHERE id_LOGEMENT = :id_LOGEMENT");
-        $query->execute(['id_LOGEMENT' => $logementId]);
-        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-            $datesDisponibles[] = $row['date'];
-        }
-    }
-    $datesReservees = [];
-    if ($logementId) {
-        $reservedDatesQuery = $bdd->prepare("SELECT date FROM DATE_RESERVE WHERE id_LOGEMENT = :id_LOGEMENT");
-        $reservedDatesQuery->execute(['id_LOGEMENT' => $logementId]);
-        while ($row = $reservedDatesQuery->fetch(PDO::FETCH_ASSOC)) {
-            $datesReservees[] = $row['date'];
-        }
-        $datesReserveesJson = json_encode($datesReservees);
-        echo "<script>var datesReservees = $datesReserveesJson;</script>";
-    }
-    $datesJson = json_encode($datesDisponibles);
-    echo "<script>var datesDisponibles = $datesJson;</script>";
-    if ($logementId) {
-        $query = $bdd->prepare("SELECT * FROM LOGEMENT WHERE id = :id");
-        $query->execute(['id' => $logementId]);
-        $logement = $query->fetch(PDO::FETCH_ASSOC);
-
-        $imgQuery = $bdd->prepare("SELECT * FROM PHOTO_LOGEMENT WHERE id_LOGEMENT = :id_LOGEMENT");
-        $imgQuery->execute(['id_LOGEMENT' => $logementId]);
-        $images = $imgQuery->fetchAll(PDO::FETCH_ASSOC);
-    }
-    ?>
-
     <?php require_once 'header.php'; ?>
 
     <main class="container main-content mt-4">
@@ -124,7 +91,7 @@
                 <p><strong>Prix par nuit:</strong> <?= htmlspecialchars($logement['prix']) ?>€</p>
             </div>
         </div>
-        
+
         <div class="card mt-4">
             <h3 class="card-header">Calendrier de Disponibilité</h3>
             <div class="card-body">
@@ -140,9 +107,10 @@
         <div class="card mt-4">
             <div class="card-body">
                 <h5 id="totalCost">Total: 0€</h5>
-                <form id="reservationForm" action="reservation_verif.php" method="post">
+                <form id="reservationForm" action="payment.php" method="post">
                     <input type="hidden" id="selectedDatesField" name="selectedDates">
                     <input type="hidden" id="logementIdField" name="logementId" value="<?= htmlspecialchars($logementId) ?>">
+                    <input type="hidden" id="totalCostField" name="totalCost">
                     <button type="submit" class="btn btn-primary">Réserver</button>
                 </form>
             </div>
@@ -157,8 +125,7 @@
             const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
             imageModal.show();
         }
-    </script>
-    <script>
+
         let moisActuel;
         let anneeActuelle;
 
@@ -207,7 +174,7 @@
             return moisNoms[mois - 1];
         }
 
-        let selectedDates = []; // Stockage des dates sélectionnées
+        let selectedDates = [];
 
         function construireCalendrier(mois, annee) {
             const premierJour = new Date(annee, mois - 1, 1);
@@ -247,6 +214,7 @@
         function updateTotalCost() {
             let totalCost = selectedDates.length * prixParNuit;
             document.getElementById('totalCost').textContent = `Total: ${totalCost}€`;
+            document.getElementById('totalCostField').value = totalCost;
         }
 
         let selectedStartDate = null;
@@ -298,13 +266,12 @@
             updateTotalCost();
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            initCalendar();
-            updateTotalCost();
-        });
-
         document.getElementById('reservationForm').addEventListener('submit', function(event) {
             event.preventDefault();
+            if (selectedDates.length === 0) {
+                alert('Veuillez sélectionner au moins une date disponible.');
+                return;
+            }
             if (selectedDates.some(date => datesReservees.includes(date))) {
                 alert('Votre sélection contient des dates déjà réservées. Veuillez ajuster votre sélection.');
             } else {
@@ -319,8 +286,5 @@
         }
     </script>
 
-    <footer>
-        <?php require_once 'footer.php'; ?>
-    </footer>
 </body>
 </html>

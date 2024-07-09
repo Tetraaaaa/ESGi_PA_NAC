@@ -91,7 +91,7 @@
         dateFormat: 'yy-mm-dd'
       });
 
-      // Style pour les dates sélectionnées
+      
       $("<style type='text/css'> .selected-date a{ background-color: #F00 !important; color: #FFF !important;} </style>").appendTo("head");
     });
   </script>

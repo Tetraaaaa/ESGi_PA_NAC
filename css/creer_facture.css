@@ -1,0 +1,27 @@
+.form-container {
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .half-width {
+            width: 50%;
+        }
+        .tall-input {
+            height: 3rem;
+        }
+        .wide-input {
+            width: 80%;
+        }
+        .inline-fields {
+            display: flex;
+            justify-content: space-between;
+        }
+        .inline-field {
+            flex: 1;
+            margin-right: 10px;
+        }
+        .inline-field:last-child {
+            margin-right: 0;
+        }

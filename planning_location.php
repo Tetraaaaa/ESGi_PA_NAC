@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Locations</title>
+    <title>Planning des locations</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
@@ -24,7 +24,23 @@
 
     $id_logement = $_GET['id_logement'];
     
-    // Requête pour récupérer les locations attribuées au logement
+    
+    $stmt = $bdd->prepare("
+        SELECT id_USER 
+        FROM LOGEMENT 
+        WHERE id = :id_logement
+    ");
+    $stmt->bindParam(':id_logement', $id_logement, PDO::PARAM_INT);
+    $stmt->execute();
+    $logement = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$logement || $logement['id_USER'] !== $_SESSION['id']) {
+        echo '<p>Vous n\'êtes pas autorisé à accéder à cette page.</p>';
+        header('Location: index.php');
+        exit;
+    }
+
+    
     $stmt = $bdd->prepare("
         SELECT LOCATION.id, USER.nom, USER.prenom, LOCATION.date_debut, LOCATION.date_fin 
         FROM LOCATION 

@@ -4,11 +4,17 @@ import (
 	"crypto/sha512"
 	"encoding/hex"
 	"encoding/json"
+	"log"
 	"net/http"
 	"strings"
 
 	"github.com/gorilla/mux"
 )
+
+type Credentials struct {
+    Email    string `json:"email"`
+    Password string `json:"password"`
+}
 
 type User struct {
 	ID           int     `json:"id"`
@@ -21,11 +27,49 @@ type User struct {
 	Presentation *string `json:"presentation"`
 }
 
-func hashPassword(password string) string {
-	hash := sha512.New()
-	hash.Write([]byte(password))
-	return hex.EncodeToString(hash.Sum(nil))
+func hashSHA512(password string) string {
+	hasher := sha512.New()
+	hasher.Write([]byte(password))
+	hashedPassword := hex.EncodeToString(hasher.Sum(nil))
+	return hashedPassword
 }
+
+func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
+    // Parse the request body to get credentials
+    var credentials Credentials
+    err := json.NewDecoder(r.Body).Decode(&credentials)
+    if err != nil {
+        http.Error(w, "Invalid request body", http.StatusBadRequest)
+        return
+    }
+
+    // Perform authentication logic
+    authenticated := authenticate(credentials.Email, credentials.Password)
+    if !authenticated {
+        http.Error(w, "Invalid credentials", http.StatusUnauthorized)
+        return
+    }
+
+    // Return success response
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(true)
+}
+
+func authenticate(email, password string) bool {
+    hashedPassword := hashSHA512(password)
+
+    query := "SELECT COUNT(*) FROM USER WHERE email = ? AND mot_de_passe = ?"
+    var count int
+    err := db.QueryRow(query, email, hashedPassword).Scan(&count)
+    if err != nil {
+        log.Println("Database error:", err)
+        return false
+    }
+
+    return count > 0
+}
+
+
 
 func AddUser(w http.ResponseWriter, r *http.Request) {
 	var user User
@@ -35,11 +79,8 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Hacher le mot de passe avant de le stocker
-	user.MotDePasse = hashPassword(user.MotDePasse)
-
 	// Insérer l'utilisateur dans la base de données
-	stmt, err := db.Prepare("INSERT INTO USER (nom, prenom, status, email, age, mot_de_passe, presentation) VALUES (?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO USER ( nom, prenom, status, email, age, mot_de_passe, presentation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -54,6 +95,7 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 }
+
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	rows, err := db.Query("SELECT id,  nom, prenom, status, email, age, mot_de_passe, presentation FROM USER")
 	if err != nil {
@@ -322,34 +364,4 @@ func GetUserByStatus(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(users)
-}
-
-func VerifyUser(w http.ResponseWriter, r *http.Request) {
-	var creds struct {
-		Email      string `json:"email"`
-		MotDePasse string `json:"motDePasse"`
-	}
-	err := json.NewDecoder(r.Body).Decode(&creds)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	// Récupérer le mot de passe haché depuis la base de données
-	var storedHashedPassword string
-	err = db.QueryRow("SELECT mot_de_passe FROM USER WHERE email = ?", creds.Email).Scan(&storedHashedPassword)
-	if err != nil {
-		http.Error(w, "Utilisateur non trouvé", http.StatusUnauthorized)
-		return
-	}
-
-	// Hacher le mot de passe fourni et comparer avec celui stocké
-	hashedPassword := hashPassword(creds.MotDePasse)
-	if hashedPassword != storedHashedPassword {
-		http.Error(w, "Mot de passe incorrect", http.StatusUnauthorized)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("true"))
 }

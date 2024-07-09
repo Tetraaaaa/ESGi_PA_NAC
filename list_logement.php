@@ -1,19 +1,19 @@
 <?php
-session_start(); // Démarrer la session dès le début
+session_start(); 
 
-// Inclure le fichier de connexion à la base de données
+
 include 'include/db.php';
 
-// Récupérer l'ID de l'utilisateur connecté
+
 $id_user = isset($_SESSION['id']) ? $_SESSION['id'] : null;
 
-// Vérifier si l'utilisateur est connecté
+
 if (!$id_user) {
     header("Location: login.php?message=Veuillez vous connecter");
     exit();
 }
 
-// Récupérer tous les logements disponibles pour la réservation
+
 $query = "SELECT LOGEMENT.*, TYPE_LOGEMENT.name AS type_logement FROM LOGEMENT LEFT JOIN TYPE_LOGEMENT ON LOGEMENT.type_bien = TYPE_LOGEMENT.id WHERE LOGEMENT.validation = 1"; // Supposons que validation = 1 signifie que le logement est disponible
 $stmt = $bdd->prepare($query);
 $stmt->execute();

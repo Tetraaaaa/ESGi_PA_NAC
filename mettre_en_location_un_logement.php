@@ -8,74 +8,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/header.css">
-  
-
-
-    <!-- Include Select2 CSS -->
+  <link rel="stylesheet" href="css/mettre_en_location_un_logement.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-    <!-- Include jQuery (required for Select2) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- Include Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 
-    <style>
-      /* Custom styles for characteristics with checkboxes and icons */
-      .form-check {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .form-check input[type="checkbox"] {
-            position: absolute;
-            opacity: 0;
-        }
-
-        .form-check i {
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
-
-        .form-check label {
-            margin-left: 5px;
-            position: relative;
-            padding-left: 30px;
-            cursor: pointer;
-        }
-
-        .form-check label:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 20px;
-            height: 20px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            background-color: #fff;
-        }
-
-        .form-check input[type="checkbox"]:checked + label:before {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        .form-check input[type="checkbox"]:checked + label:after {
-            content: '\f00c';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            position: absolute;
-            left: 4px;
-            top: 0;
-            font-size: 14px;
-            color: #fff;
-        }
-
-    </style>
 </head>
 <body>
   <?php
@@ -93,10 +31,9 @@
 include 'include/db.php';
 include_once 'init.php';
 
-// Récupérer les caractéristiques de la base de données
+
 include 'include/db.php';
 
-// Récupérer les caractéristiques et leurs icônes de la base de données
 $q = '
     SELECT c.id, c.nom, i.emplacement 
     FROM CARACTERISTIQUE c

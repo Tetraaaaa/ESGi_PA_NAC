@@ -1,17 +1,16 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+
 
 session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require_once 'include/connection_db.php';
 
-    // Récupération des données du formulaire
+    
     $type = $_POST['type'] ?? null;
     $presentation = $_POST['presentation'] ?? null;
     $dates_disponibles = $_POST['dates_disponibles'] ?? '';
     $departements = $_POST['departements'] ?? [];
-    $dates = explode(',', $dates_disponibles); // Transformation de la chaîne de dates en tableau
+    $dates = explode(',', $dates_disponibles); 
     $id = mt_rand(1, 2147483647);
     try {
         $query = "INSERT INTO SERVICE (id, type, description, id_USER) VALUES (?, ?, ?, ?)";
@@ -37,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     header("Location: compte.php");
     exit;
 } else {
-    // Redirection si la page est accédée sans soumission de formulaire
+    
     header("Location: mettre_en_vente_un_service.php");
     exit;
 }

@@ -13,7 +13,7 @@ $id_location = isset($_GET['id_location']) ? $_GET['id_location'] : null;
 $id_logement = isset($_GET['id_logement']) ? $_GET['id_logement'] : null;
 $demande_user_id = $_SESSION['id'];
 
-// Récupérer l'id de l'utilisateur propriétaire du service
+
 $stmt = $bdd->prepare("SELECT id_USER FROM SERVICE WHERE id = :id_service");
 $stmt->execute(['id_service' => $id_service]);
 $id_user_recois = $stmt->fetchColumn();

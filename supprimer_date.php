@@ -2,7 +2,7 @@
 session_start();
 require 'include/db.php';
 
-header('Content-Type: application/json'); // Envoyer la réponse en JSON
+header('Content-Type: application/json'); 
 
 if (isset($_POST['date'], $_POST['id_logement'])) {
     $date = $_POST['date'];

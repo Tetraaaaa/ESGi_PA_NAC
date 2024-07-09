@@ -15,20 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_location = $_POST['id_location'] ?? null;
     $id_logement = $_POST['id_logement'] ?? null;
 
-    // Convert empty strings to null
+   
     $id_location = $id_location === '' ? null : $id_location;
     $id_logement = $id_logement === '' ? null : $id_logement;
 
-    // Créer le répertoire "intervention" s'il n'existe pas
+
     if (!is_dir('intervention')) {
         mkdir('intervention', 0777, true);
     }
 
-    // Générer un nom de fichier aléatoire pour le PDF
+    
     $pdf_filename = 'intervention_' . uniqid() . '.pdf';
     $pdf_filepath = 'intervention/' . $pdf_filename;
 
-    // Création du PDF
+  
     $pdf = new FPDF();
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 16);
@@ -48,11 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdf->Cell(40, 10, 'Fin de l\'intervention: ' . $fin_intervention);
     $pdf->Output('F', $pdf_filepath);
 
-    // Stocker les informations dans la base de données
+
     $stmt = $bdd->prepare("INSERT INTO INTERVENTION_SERVICE (entreprise, nature_intervention, debut_intervention, description_intervention, problemes_rencontres, fin_intervention, id_location, id_logement, id_service, emplacement) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->execute([$entreprise, $nature_intervention, $debut_intervention, $description_intervention, $problemes_rencontres, $fin_intervention, $id_location, $id_logement, $id_service, $pdf_filepath]);
 
-    // Télécharger le PDF pour l'utilisateur
+
     header('Content-Type: application/pdf');
     header('Content-Disposition: attachment; filename="' . basename($pdf_filepath) . '"');
     readfile($pdf_filepath);

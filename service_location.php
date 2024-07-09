@@ -10,7 +10,6 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $location_id = $_GET['id'];
 
-// Requête pour récupérer les services liés à la location
 $stmt = $bdd->prepare("
     SELECT FAIT_APPELLE.*, SERVICE.type, SERVICE.description, SERVICE.id AS service_id, USER.nom, USER.prenom, LOCATION.id_USER
     FROM FAIT_APPELLE

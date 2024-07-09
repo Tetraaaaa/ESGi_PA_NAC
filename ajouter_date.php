@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 if (isset($_POST['date'], $_POST['id_logement'])) {
     $date = $_POST['date'];
     $idLogement = $_POST['id_logement'];
-    $id = mt_rand(1, 2147483647);  // Générer un ID aléatoire
+    $id = mt_rand(1, 2147483647);  
 
     try {
         $stmt = $bdd->prepare("INSERT INTO DATE_DISPO (id, date, id_LOGEMENT) VALUES (?, ?, ?)");

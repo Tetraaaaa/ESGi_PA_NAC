@@ -6,7 +6,7 @@ ini_set('display_errors', 1);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'])) {
     $logement_id = $_GET['id'];
 
-    // Récupération et nettoyage des données du formulaire
+    
     $nom = $_POST['nom'];
     $description = $_POST['description'];
     $adresse = $_POST['adresse'];
@@ -17,15 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'])) {
     $capacite_location = $_POST['capacite_location'];
     $dates_disponibles = $_POST['dates_disponibles'];
 
-    // Mise à jour des informations du logement
     $updateStmt = $bdd->prepare("UPDATE LOGEMENT SET nom = ?, description = ?, adresse = ?, ville = ?, prix = ?, code_postal = ?, pays = ?, capacite_location = ? WHERE id = ?");
     $updateStmt->execute([$nom, $description, $adresse, $ville, $prix, $code_postal, $pays, $capacite_location, $logement_id]);
 
-    // Suppression des anciennes dates disponibles
     $deleteDateStmt = $bdd->prepare("DELETE FROM DATE_DISPO WHERE id_LOGEMENT = ?");
     $deleteDateStmt->execute([$logement_id]);
 
-    // Ajout des nouvelles dates disponibles
     if (!empty($dates_disponibles)) {
         $dates = explode(',', $dates_disponibles);
         foreach ($dates as $date) {

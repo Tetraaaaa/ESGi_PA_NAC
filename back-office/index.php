@@ -70,6 +70,13 @@ include 'verif.php';
 </section>
 
 <section>
+    <h2><a href="filtre_icone.php">Filtre icone</a></h2>
+    <!-- Contenu de la section Réservation -->
+    <p>Voir Caractéristique.</p>
+    <!-- Ajoutez ici tout contenu spécifique à cette section -->
+</section>
+
+<section>
     <h2><a href="deconnexion.php">Déconnexion</a></h2>
     <!-- Contenu de la section Déconnexion -->
     <p>Vous pouvez vous déconnecter ici.</p>

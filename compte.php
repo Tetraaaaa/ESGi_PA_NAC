@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 include 'include/connection_db.php';
-include_once 'init.php'; // Inclusion du fichier pour gérer les traductions
+include_once 'init.php'; 
 
 $sql = "SELECT emplacement FROM PHOTO_PROFIL WHERE id_USER = :id";
 $stmt = $bdd->prepare($sql);
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo_profil'])) {
                     <img src="<?php echo htmlspecialchars($_SESSION['photo_profil']); ?>" alt="<?php echo $translations['Photo de Profil']; ?>" class="profile-pic" id="profilePic">
                 </label>
                 <input type="file" name="photo_profil" id="photo_profil" style="display:none;" onchange="previewImage(event)">
-                <button type="submit" class="btn btn-primary mt-3"><?php echo $translations['Mettre à jour la photo de profil']; ?></button>
+                <button type="submit" class="btn btn-primary mt-3"><?php echo $translations['Valider la photo de profil']; ?></button>
             </form>
 
             <?php if ($_SESSION['status'] == '4'): ?>

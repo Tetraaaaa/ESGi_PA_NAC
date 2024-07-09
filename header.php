@@ -3,10 +3,9 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 include 'init.php';
-// Inclure la connexion à la base de données
 include 'include/connection_db.php';
 
-// Récupérer les informations de l'utilisateur depuis la base de données si elles ne sont pas déjà dans la session
+
 if (isset($_SESSION['id']) && !isset($_SESSION['photo_profil'])) {
     $sql = "SELECT P.emplacement AS photo_profil 
             FROM USER U
@@ -56,7 +55,7 @@ if (isset($_SESSION['id']) && !isset($_SESSION['photo_profil'])) {
                         <a href="mettre_en_vente_un_service.php"><?php echo $translations['Mettre en vente un service'] ?? 'Mettre en vente un service'; ?></a>
                     <?php endif; ?>
                     <?php if ($_SESSION['status'] == "0"): ?>
-                        <a href="back-office/"><?php echo $translations['Admin'] ?? 'Admin'; ?></a>
+                        <a href="acceuil-back.php"><?php echo $translations['Admin'] ?? 'Admin'; ?></a>
                     <?php endif; ?>
                     <a href="logout.php"><?php echo $translations['Déconnexion'] ?? 'Déconnexion'; ?></a>
                 </div>

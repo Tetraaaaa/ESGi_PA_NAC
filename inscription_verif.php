@@ -78,13 +78,13 @@ $_SESSION['validationCodeExpires'] = time() + 300;
 
 sendValidationEmail($email, $validationCode);
 
-// Ajoutez un message de débogage avant la redirection
-echo "Validation email sent, redirecting to code_validation_email.php..."; // Message de débogage
 
-// Utilisez des chemins absolus pour les redirections
+echo "Validation email sent, redirecting to code_validation_email.php..."; 
+
+
 header('Location: /code_validation_email.php');
 exit;
 
-echo "If you see this, redirection did not work"; // Message de débogage si la redirection échoue pour une raison quelconque
+echo "If you see this, redirection did not work"; 
 ob_end_flush();
 ?>

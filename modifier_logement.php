@@ -9,60 +9,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/modifier_logement.css">
 
   <title>Modifier Logement</title>
-  <style>
-    .form-check {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .form-check input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-    }
-    .form-check i {
-      margin-right: 10px;
-      font-size: 1.2em;
-    }
-    .form-check label {
-      margin-left: 5px;
-      position: relative;
-      padding-left: 30px;
-      cursor: pointer;
-    }
-    .form-check label:before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 20px;
-      height: 20px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      background-color: #fff;
-    }
-    .form-check input[type="checkbox"]:checked + label:before {
-      background-color: #007bff;
-      border-color: #007bff;
-    }
-    .form-check input[type="checkbox"]:checked + label:after {
-      content: '\f00c';
-      font-family: 'Font Awesome 5 Free';
-      font-weight: 900;
-      position: absolute;
-      left: 4px;
-      top: 0;
-      font-size: 14px;
-      color: #fff;
-    }
-  </style>
 </head>
 <body>
   <?php
     session_start();
     require_once 'header.php';
-    require 'include/db.php'; // Assurez-vous que ce fichier contient les informations de connexion à votre base de données.
+    require 'include/db.php'; 
 
     if (!isset($_GET['id']) || empty($_GET['id'])) {
         echo '<p>Erreur : Aucun ID de logement fourni.</p>';
@@ -70,10 +25,21 @@
     }
 
     $logement_id = $_GET['id'];
+    $user_id = $_SESSION['id'];
 
-    // Vérifier si le formulaire a été soumis
+    
+    $stmt = $bdd->prepare("SELECT id_USER FROM LOGEMENT WHERE id = ?");
+    $stmt->execute([$logement_id]);
+    $logement = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$logement || $logement['id_USER'] != $user_id) {
+        echo '<p>Vous n\'avez pas l\'autorisation d\'accéder à cette page.</p>';
+        header('Location: index.php');
+        exit;
+    }
+    
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Mettre à jour le logement
+        
         $nom = $_POST['nom'];
         $description = $_POST['description'];
         $adresse = $_POST['adresse'];
@@ -87,7 +53,7 @@
         $updateStmt = $bdd->prepare("UPDATE LOGEMENT SET nom = ?, description = ?, adresse = ?, ville = ?, prix = ?, code_postal = ?, pays = ?, capacite_location = ? WHERE id = ?");
         $updateStmt->execute([$nom, $description, $adresse, $ville, $prix, $code_postal, $pays, $capacite_location, $logement_id]);
 
-        // Mettre à jour les caractéristiques du logement
+        
         $bdd->prepare("DELETE FROM CARACTERISTIQUE_LOGEMENT WHERE id_LOGEMENT = ?")->execute([$logement_id]);
         foreach ($caracteristiques as $idCaracteristique) {
             $bdd->prepare("INSERT INTO CARACTERISTIQUE_LOGEMENT (id_LOGEMENT, id_CARACTERISTIQUE) VALUES (?, ?)")
@@ -97,7 +63,7 @@
         echo "<p>Le logement a été mis à jour avec succès.</p>";
     }
 
-    // Récupérer les informations du logement pour les afficher dans le formulaire
+    
     $stmt = $bdd->prepare("SELECT * FROM LOGEMENT WHERE id = ?");
     $stmt->execute([$logement_id]);
     $logement = $stmt->fetch();
@@ -107,12 +73,12 @@
         exit;
     }
 
-    // Récupérer toutes les caractéristiques disponibles
+    
     $caracStmt = $bdd->prepare("SELECT c.*, i.emplacement AS icone_emplacement FROM CARACTERISTIQUE c LEFT JOIN ICONE i ON c.id = i.id_CARACTERISTIQUE");
     $caracStmt->execute();
     $caracteristiques = $caracStmt->fetchAll();
 
-    // Récupérer les caractéristiques du logement actuel
+    
     $logementCaracStmt = $bdd->prepare("SELECT id_CARACTERISTIQUE FROM CARACTERISTIQUE_LOGEMENT WHERE id_LOGEMENT = ?");
     $logementCaracStmt->execute([$logement_id]);
     $logementCaracteristiques = $logementCaracStmt->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -182,7 +148,7 @@
       <h3>Photos du logement</h3>
       <div class="row">
         <?php
-        // Récupérer les photos du logement
+        
         $photoStmt = $bdd->prepare("SELECT * FROM PHOTO_LOGEMENT WHERE id_LOGEMENT = ?");
         $photoStmt->execute([$logement_id]);
         while ($photo = $photoStmt->fetch()) {

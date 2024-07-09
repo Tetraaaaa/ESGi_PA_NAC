@@ -1,3 +1,34 @@
+<?php
+session_start();
+require_once 'include/connection_db.php';
+
+if (!isset($_SESSION['id'])) {
+    header('Location: index.php');
+    exit;
+}
+
+$id_service = $_GET['id_service'] ?? null;
+$id_location = $_GET['id_location'] ?? null;
+$id_logement = $_GET['id_logement'] ?? null;
+$user_id = $_SESSION['id'];
+
+if (!$id_service || (!$id_location && !$id_logement)) {
+    header('Location: index.php');
+    exit;
+}
+
+// Vérifier que l'utilisateur possède bien le service
+$stmtService = $bdd->prepare("SELECT id_USER FROM SERVICE WHERE id = :id_service");
+$stmtService->bindParam(':id_service', $id_service, PDO::PARAM_INT);
+$stmtService->execute();
+$service = $stmtService->fetch(PDO::FETCH_ASSOC);
+
+if (!$service || $service['id_USER'] != $user_id) {
+    header('Location: index.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,39 +41,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/header.css">
-    <style>
-        .form-container {
-            background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .half-width {
-            width: 50%;
-        }
-        .tall-input {
-            height: 3rem;
-        }
-        .wide-input {
-            width: 80%;
-        }
-    </style>
+    <link rel="stylesheet" href="css/crer_intervention.css">
 </head>
 <body>
     <?php 
-    require_once 'include/connection_db.php'; 
-    session_start();
     require_once 'header.php'; 
-
-    if (!isset($_GET['id_service']) || (!isset($_GET['id_location']) && !isset($_GET['id_logement']))) {
-        echo '<p>Erreur : Données manquantes.</p>';
-        exit;
-    }
-
-    $id_service = $_GET['id_service'];
-    $id_location = isset($_GET['id_location']) ? $_GET['id_location'] : null;
-    $id_logement = isset($_GET['id_logement']) ? $_GET['id_logement'] : null;
     ?>
     <main class="container mt-4">
         <h2>Créer une Intervention</h2>

@@ -17,7 +17,6 @@
     session_start();
     require_once 'header.php'; 
     
-    // Vérifier si l'utilisateur est connecté
     if (!isset($_SESSION['id'])) {
         echo '<p>Veuillez vous connecter pour voir vos appels.</p>';
         exit;
@@ -25,19 +24,16 @@
 
     $userId = $_SESSION['id'];
     
-    // Rechercher les services attribués à l'utilisateur
     $stmt = $bdd->prepare("SELECT id FROM SERVICE WHERE id_USER = :userId");
     $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
     $stmt->execute();
     $services = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-    // Si aucun service n'est trouvé, afficher un message et arrêter
     if (empty($services)) {
         echo '<p>Aucun service trouvé pour cet utilisateur.</p>';
         exit;
     }
 
-    // Préparation de la requête pour récupérer les appels de FAIT_APPELLE
     $placeholders = implode(',', array_fill(0, count($services), '?'));
     $stmt = $bdd->prepare("
         SELECT FAIT_APPELLE.*, SERVICE.type, SERVICE.description, USER.nom, USER.prenom, FAIT_APPELLE.id_location, FAIT_APPELLE.id_service
@@ -50,7 +46,6 @@
     $stmt->execute($services);
     $appels = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Préparation de la requête pour récupérer les appels de SELECTIONNE
     $stmt = $bdd->prepare("
         SELECT SELECTIONNE.*, SERVICE.type, SERVICE.description, USER.nom, USER.prenom, SELECTIONNE.id_logement, SELECTIONNE.id_SERVICE as id_service
         FROM SELECTIONNE

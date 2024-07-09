@@ -17,61 +17,61 @@
 <body>
 <?php
 session_start();
-require_once 'include/connection_db.php'; // Connexion à la BDD
+require_once 'include/connection_db.php';
 
-// Récupération de l'ID du service depuis l'URL
+
 $serviceId = isset($_GET['id']) ? $_GET['id'] : '';
 
-// Assurez-vous que l'utilisateur est connecté
+
 if (!isset($_SESSION['id'])) {
     header('Location: connexion.php');
     exit;
 }
 
 if ($serviceId) {
-    // Récupération de l'ID de l'utilisateur qui possède le service
+    
     $query = $bdd->prepare("SELECT id, id_USER FROM SERVICE WHERE id = :id");
     $query->execute(['id' => $serviceId]);
     $service = $query->fetch(PDO::FETCH_ASSOC);
 
-    // Si le service n'existe pas ou si l'utilisateur actuel n'est pas le propriétaire
+    
     if (!$service || $service['id_USER'] != $_SESSION['id']) {
         echo '<div class="alert alert-danger">Vous n\'êtes pas autorisé à modifier ce service.</div>';
-        exit; // Arrêt du script
+        exit; 
     }
 }
 
 if ($serviceId) {
-    // Récupération des informations du service
+    
     $query = $bdd->prepare("SELECT * FROM SERVICE WHERE id = :id");
     $query->execute(['id' => $serviceId]);
     $service = $query->fetch(PDO::FETCH_ASSOC);
 
-    // Récupération des dates associées
+    
     $dateQuery = $bdd->prepare("SELECT date FROM CALENDRIER WHERE id_service = :id_service");
     $dateQuery->execute(['id_service' => $serviceId]);
     $dates = $dateQuery->fetchAll(PDO::FETCH_COLUMN);
 }
 
-// Traitement du formulaire de mise à jour
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $type = $_POST['type'];
     $description = $_POST['description'];
-    $selectedDates = explode(',', $_POST['dates_disponibles']); // Transforme la chaîne de dates en tableau
+    $selectedDates = explode(',', $_POST['dates_disponibles']); 
 
-    // Mettre à jour le service
+   
     $updateQuery = $bdd->prepare("UPDATE SERVICE SET type = :type, description = :description WHERE id = :id");
     $updateQuery->execute(['type' => $type, 'description' => $description, 'id' => $serviceId]);
 
-    // Récupération des dates déjà présentes pour ce service
+   
     $existingDatesQuery = $bdd->prepare("SELECT date FROM CALENDRIER WHERE id_service = :id_service");
     $existingDatesQuery->execute(['id_service' => $serviceId]);
     $existingDates = $existingDatesQuery->fetchAll(PDO::FETCH_COLUMN);
 
-    // Fusion des dates existantes avec les nouvelles, sans doublons
+   
     $allDates = array_unique(array_merge($existingDates, $selectedDates));
 
-    // Mise à jour des dates dans CALENDRIER
+   
     $bdd->beginTransaction();
     $deleteDates = $bdd->prepare("DELETE FROM CALENDRIER WHERE id_service = :id_service");
     $deleteDates->execute(['id_service' => $serviceId]);
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div>
             <?php
             try {
-                // Préparation de la requête pour récupérer les dates du service spécifié
+                
                 $query = $bdd->prepare("SELECT date FROM CALENDRIER WHERE id_service = :id_service");
                 $query->execute(['id_service' => $serviceId]);
                 $dates = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<h1>Dates disponibles pour le service ID: $serviceId</h1>";
                 echo "<ul>";
                 foreach ($dates as $date) {
-                    echo "<li>" . htmlspecialchars($date['date']) . "</li>"; // Affichage sécurisé des dates
+                    echo "<li>" . htmlspecialchars($date['date']) . "</li>"; 
                 }
                 echo "</ul>";
             } catch (PDOException $e) {
@@ -148,7 +148,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         dateFormat: 'yy-mm-dd'
       });
 
-      // Style pour les dates sélectionnées
       $("<style type='text/css'> .selected-date a{ background-color: #F00 !important; color: #FFF !important;} </style>").appendTo("head");
     });
   </script>
